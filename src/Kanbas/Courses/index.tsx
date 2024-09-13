@@ -21,7 +21,7 @@ export default function Courses() {
                     <Route path="/1234/Modules" element={<Modules />} />
                     <Route path="/1234/Assignments" element={<Assignments />} />
                     <Route path="/1234/Assignments/:aid" element={<AssignmentEditor />} />
-                    <Route path="/People" element={<h3>People</h3>} />
+                    <Route path="/1234/People" element={<h3>People</h3>} />
                 </Routes>
       </td>
         </tr>
