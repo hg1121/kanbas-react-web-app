@@ -5,12 +5,14 @@ export default function Modules() {
         <tr>
           <button>Collpase ALL</button>
           <button>View Progress</button>
-          <button>Publish All</button>
+          <select>
+            <option>Publish All</option>
+          </select>
           <button>+Modules</button>
         </tr>
         <ul id="wd-modules">
           <li className="wd-module">
-            <div className="wd-title">Week 1</div>
+            <div className="wd-title">Week 1, Lecture 1 - Course Introduction, Syllabus, Agenda</div>
             <ul className="wd-lessons">
               <li className="wd-lesson">
                 <span className="wd-title">LEARNING OBJECTIVES</span>
@@ -36,7 +38,7 @@ export default function Modules() {
             </ul>
           </li>
           <li className="wd-module">
-            <div className="wd-title">Week 2</div>
+            <div className="wd-title">Week 1, Lecture 2 - Formatting User Interfaces with HTML</div>
             <ul className="wd-lessons">
               <li className="wd-lesson">
                 <span className="wd-title">LEARNING OBJECTIVES</span>
