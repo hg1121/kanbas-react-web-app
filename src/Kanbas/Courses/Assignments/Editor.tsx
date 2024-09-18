@@ -74,7 +74,7 @@ export default function AssignmentEditor() {
                 <input type="checkbox" name="check-online-entry" id="wd-student-annotation"/>
                 <label htmlFor="wd-student-annotation">Student Annotation</label><br/>
 
-                <input type="checkbox" name="check-online-entry" id="wd-file-upload	"/>
+                <input type="checkbox" name="check-online-entry" id="wd-file-upload"/>
                 <label htmlFor="wd-file-upload">File Uploads</label><br/>
 
             </td>
