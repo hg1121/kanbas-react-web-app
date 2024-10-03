@@ -1,0 +1,96 @@
+/* Base styles for the navigation icons */
+/* .list-group-item:active {
+    background-color: white !important;
+} */
+
+body {
+  margin: 0;
+  padding: 0;
+}
+body * {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@media (min-width: 768px) {
+  #wd-kanbas .wd-main-content-offset {
+    padding-left: 140px !important;
+  }
+}
+
+.list-group.wd > .list-group-item.active {
+  color: black;
+  background-color: white;
+  border-left: 3px solid black !important;
+}
+
+.list-group.wd > .list-group-item.inactive {
+  color: red;
+  background-color: white;
+}
+
+.btn-secondary {
+  --bs-btn-color: #000 !important;
+  --bs-btn-bg: rgb(224, 224, 224) !important;
+  --bs-btn-border-color: #c7cdd1 !important;
+  --bs-btn-hover-color: #fff !important;
+}
+.bg-secondary {
+  /* --bs-secondary-rgb: 199, 205, 209;
+   */
+   --bs-secondary-rgb: 224, 224, 224;
+}
+.list-group-item {
+  --bs-list-group-border-color: rgb(224, 224, 224);
+}
+/* .wd-lesson {
+  border-left: 3px solid green !important;
+} */
+
+.wd-module {
+  border-left: 3px solid green !important;
+}
+
+.text-green {
+  color: green;
+}
+.assignment-header-bar{
+  height: 50px;
+}
+/* Remove border radius for buttons */
+.btn {
+  border-radius: 0;
+}
+
+.btn-assignment-group{
+  --btn-assignment-group-bg: 
+}
+
+.no-decoration {
+  text-decoration: none;
+  color: black;
+}
+
+/* .assignment-editor-input {
+  width: 60% !important;
+} */
+
+.width-80 {
+  width: 80% !important;
+}
+
+.btn-transparent {
+  --bs-btn-color: #000 !important;
+  /* --bs-btn-bg: #ced0d1 !important; */
+  --bs-btn-border-color: #c7cdd1 !important;
+  --bs-btn-hover-color: #fff !important;
+}
+
+tr.spacing {
+  display: table-row;
+  margin-bottom: 24px; /* Adjust this value for the desired spacing */
+}
+/* 
+.border-gray {
+  border: gray;
+  /* border-color: gray; */
+/* }  */
