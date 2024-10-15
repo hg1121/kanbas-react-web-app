@@ -1,21 +1,29 @@
 import { NavLink } from "react-router-dom";
+import { useMatch } from "react-router";
+import { useNavigate } from 'react-router-dom';
+// import { useState } from 'react';
+
 export default function CoursesNavigation() {
+  const navigate = useNavigate();
+  
+  const links = ["Home", "Modules", "Piazza", "Zoom", "Assignments", "Quizzes", "Grades", "People"];
+  const match = useMatch("/Kanbas/Courses/:cid/*");
+  // console.log(match);
+  const cid = match?.params.cid;
+  // const [selectedCourseId, setSelectedCourseId] = useState(cid);
+
+  // console.log(cid);
   return (
     <div id="wd-courses-navigation" className="wd list-group fs-5 rounded-0">
-      <NavLink to="/Kanbas/Courses/1234/Home" id="wd-course-home-link"
-        className={({ isActive }) => `list-group-item border border-0 ${isActive ? "active" : "inactive"}`}> Home </NavLink><br />
-      <NavLink to="/Kanbas/Courses/1234/Modules" id="wd-course-modules-link"
-        className={({ isActive }) => `list-group-item border border-0 ${isActive ? "active" : "inactive"}`}> Modules </NavLink><br />
-      <NavLink to="/Kanbas/Courses/1234/Piazza" id="wd-course-piazza-link"
-        className={({ isActive }) => `list-group-item border border-0 ${isActive ? "active" : "inactive"}`}> Piazza </NavLink><br />
-      <NavLink to="/Kanbas/Courses/1234/Zoom" id="wd-course-zoom-link"
-        className={({ isActive }) => `list-group-item border border-0 ${isActive ? "active" : "inactive"}`}> Zoom </NavLink><br />
-      <NavLink to="/Kanbas/Courses/1234/Assignments" id="wd-course-quizzes-link"
-        className={({ isActive }) => `list-group-item border border-0 ${isActive ? "active" : "inactive"}`}> Assignments </NavLink><br />
-      <NavLink to="/Kanbas/Courses/1234/Quizzes" id="wd-course-assignments-link"
-        className={({ isActive }) => `list-group-item border border-0 ${isActive ? "active" : "inactive"}`}> Quizzes </NavLink><br />
-      <NavLink to="/Kanbas/Courses/1234/People" id="wd-course-people-link"
-        className={({ isActive }) => `list-group-item border border-0 ${isActive ? "active" : "inactive"}`} > People </NavLink><br />
+      {links.map((link, index) => (
+        <>
+        <NavLink to={`/Kanbas/Courses/${cid}/${link}`} id="wd-course-home-link"
+        className={({ isActive }) => `list-group-item border border-0 ${isActive ? "active" : "inactive"}`}
+        key={index}
+        > {link} </NavLink>
+        <br />
+        </> 
+      ))}
     </div>
 );}
 

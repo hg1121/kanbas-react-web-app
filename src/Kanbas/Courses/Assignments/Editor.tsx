@@ -1,10 +1,27 @@
 import { FiChevronDown } from "react-icons/fi";
 import AssignTo from "./AssignTo";
+import * as db from "../../Database";
+import { useMatch } from "react-router";
+import { NavLink } from "react-router-dom";
 
-export default function AssignmentEditor() {
+interface ModulesProps {
+  cid?: string; // Make cid optional
+}
+
+export default function AssignmentEditor({ cid }: ModulesProps) {
   const defaultDateTime = new Date(2024, 4, 13, 14, 30)
     .toISOString()
     .slice(0, 16);
+  
+    const assignments = db.assignments;
+    const match = useMatch("/Kanbas/Courses/:cid/Assignments/:aid")
+    const course_id = cid || match?.params.cid;
+    const a_id = match?.params.aid;
+    // console.log(course_id);
+    // console.log(assignment_id);
+    const assignment = assignments.find((assignment: { _id: any; }) => assignment._id === a_id);
+    // console.log(assignment);
+
   return (
     <div className="mx-5 w-60">
       <div className="mb-4">
@@ -15,7 +32,8 @@ export default function AssignmentEditor() {
           type="text"
           className="form-control form-control-lg"
           id="exampleFormControlInput1"
-          placeholder="A1"
+          // placeholder="A1"
+          value={assignment? assignment.title : 'undefined'}
         />
       </div>
 
@@ -28,9 +46,9 @@ export default function AssignmentEditor() {
                 id="exampleFormControlTextarea1"
                 rows={10}
               >
-                The assignment is available online. Submit a link to the landing
-                page of your Web application running on Netlify. The landing
-                page should include the following: Your full name and section
+                The assignment is available online. 
+                Submit a link to the landing page of your Web application running on Netlify. 
+                The landing page should include the following: Your full name and section
                 Links to each of the lab assignments Link to the Kanbas
                 application Links to all relevant source code repositories The
                 Kanbas application should include a link to navigate back to the
@@ -50,7 +68,7 @@ export default function AssignmentEditor() {
                 type="text"
                 className="form-control form-control-lg rounded-1 mb-3"
                 id="wd-points"
-                value={100}
+                value={assignment? assignment.points : 'undefine'}
               />
             </td>
           </tr>
@@ -226,9 +244,10 @@ export default function AssignmentEditor() {
                   <input
                     type="datetime-local"
                     id="wd-due-date"
-                    value={defaultDateTime}
+                    value={assignment ? assignment.due : ""}
                     className="form-control"
                     width={100}
+                    // placeholder={assignment?.due}
                   />
                   <br />
                 </div>
@@ -239,7 +258,7 @@ export default function AssignmentEditor() {
                     <input
                       type="datetime-local"
                       id="wd-available-from"
-                      // value="2024-05-06"
+                      value={assignment? assignment.available : "2024-05-06T00:00"}
                       className="form-control"
                     />
                   </td>
@@ -270,8 +289,11 @@ export default function AssignmentEditor() {
             className="text-end align-end"
             style={{ marginTop: "20px" }}
           >
+            <NavLink to={`/Kanbas/Courses/${cid}/Assignments`}>
             <button className="btn btn-secondary me-2">Cancel</button>
             <button className="btn btn-danger">Save</button>
+            </NavLink>
+            
           </td>
         </tr>
       </table>
