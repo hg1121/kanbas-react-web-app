@@ -4,5 +4,6 @@ export interface Assignment{
     "course": string;
     "available": string;
     "due": string;
+    "until": string;
     "points": string;
 }

@@ -268,7 +268,7 @@ export default function AssignmentEditor({ cid }: ModulesProps) {
                     <input
                       type="datetime-local"
                       id="wd-available-until"
-                      // value="2024-05-20"
+                      value={assignment? assignment.until : "2024-05-06T00:00"}
                       className="form-control"
                     />
                   </td>

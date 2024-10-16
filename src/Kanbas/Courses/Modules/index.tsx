@@ -28,7 +28,9 @@ export default function Modules({ cid }: ModulesProps) {
           .map((module: any, index: any) => (
           <li className=" list-group-item p-0 mb-5 fs-5 border-gray" key={index}>
             <div className="wd-title p-3 ps-2 bg-secondary">
-              <BsGripVertical className="me-2 fs-3" /> {module.name} <ModuleControlButtons />
+              <BsGripVertical className="me-2 fs-md-2 fs-lg-3" /> 
+              <span className="fs-md-2 fs-lg-3">{module.name}</span> 
+              <ModuleControlButtons />
             </div>
             {module.lessons && (
               <ul className="wd-lessons list-group rounded-0">

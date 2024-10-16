@@ -9,6 +9,19 @@ import * as db from "../../Database";
 import { useMatch } from "react-router";
 import { Link } from "react-router-dom";
 
+const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  const options: Intl.DateTimeFormatOptions = { 
+    year: 'numeric', 
+    month: '2-digit', 
+    day: '2-digit', 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    hour12: false 
+  };
+  return date.toLocaleString('en-US', options).replace(',', '');
+};
+
 export default function Assignments() {
   const assignments = db.assignments;
   const match = useMatch("/Kanbas/Courses/:cid/Assignments");
@@ -53,8 +66,8 @@ export default function Assignments() {
             <span>
             <h4><a href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}className="no-decoration"> {assignment.title}</a></h4>
               <span className="text-danger">Multiple Modules</span> |{" "}
-              <b>Not available until </b>{assignment.available} | <br />
-              <b>Due </b>{assignment.due} | {assignment.points} pts
+              <b>Not available until </b>{formatDate(assignment.available)} | <br />
+              <b>Due </b>{formatDate(assignment.due)} | {assignment.points} pts
             </span>
           </span>
           <LessonControlButtons />
