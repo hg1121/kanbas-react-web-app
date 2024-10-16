@@ -144,5 +144,381 @@
     "available": "2024-05-20T00:00",
     "due": "2024-05-27T23:59",
     "points": "100"
+  },
+
+  {
+    "_id": "A701",
+    "title": "Translation of Elvish Texts",
+    "course": "RS107",
+    "available": "2024-05-01T00:00",
+    "due": "2024-05-08T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A702",
+    "title": "Analysis of Dwarvish Runestones",
+    "course": "RS107",
+    "available": "2024-05-09T00:00",
+    "due": "2024-05-16T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A703",
+    "title": "Comparative Study of Languages",
+    "course": "RS107",
+    "available": "2024-05-17T00:00",
+    "due": "2024-05-24T23:59",
+    "points": "100"
+  },
+
+  {
+    "_id": "A801",
+    "title": "Diplomatic Strategies of Elves",
+    "course": "RS108",
+    "available": "2024-06-01T00:00",
+    "due": "2024-06-08T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A802",
+    "title": "Wizards and Their Influence",
+    "course": "RS108",
+    "available": "2024-06-09T00:00",
+    "due": "2024-06-16T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A803",
+    "title": "Case Study: The Council of Elrond",
+    "course": "RS108",
+    "available": "2024-06-17T00:00",
+    "due": "2024-06-24T23:59",
+    "points": "100"
+  },
+
+  {
+    "_id": "A901",
+    "title": "Introduction to Magical Theories",
+    "course": "RS109",
+    "available": "2024-06-01T00:00",
+    "due": "2024-06-08T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A902",
+    "title": "Herbology and Potions Assignment",
+    "course": "RS109",
+    "available": "2024-06-09T00:00",
+    "due": "2024-06-16T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A903",
+    "title": "Practical Spell Casting Exercise",
+    "course": "RS109",
+    "available": "2024-06-17T00:00",
+    "due": "2024-06-24T23:59",
+    "points": "100"
+  },
+
+  {
+    "_id": "A1001",
+    "title": "Foundations of Democratic Education",
+    "course": "RS110",
+    "available": "2024-05-01T00:00",
+    "due": "2024-05-08T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A1002",
+    "title": "Critical Pedagogy Analysis",
+    "course": "RS110",
+    "available": "2024-05-09T00:00",
+    "due": "2024-05-16T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A1003",
+    "title": "Classroom Democracy Project",
+    "course": "RS110",
+    "available": "2024-05-17T00:00",
+    "due": "2024-05-24T23:59",
+    "points": "100"
+  },
+
+  {
+    "_id": "A1101",
+    "title": "Philosophical Essays on Independence",
+    "course": "RS111",
+    "available": "2024-06-01T00:00",
+    "due": "2024-06-08T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A1102",
+    "title": "Case Studies in Liberation Movements",
+    "course": "RS111",
+    "available": "2024-06-09T00:00",
+    "due": "2024-06-16T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A1103",
+    "title": "Debate on Freedom and Authority",
+    "course": "RS111",
+    "available": "2024-06-17T00:00",
+    "due": "2024-06-24T23:59",
+    "points": "100"
+  },
+
+  {
+    "_id": "A1201",
+    "title": "Analysis of Educational Reforms",
+    "course": "RS112",
+    "available": "2024-06-01T00:00",
+    "due": "2024-06-08T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A1202",
+    "title": "Field Study on 19th Century Pedagogy",
+    "course": "RS112",
+    "available": "2024-06-09T00:00",
+    "due": "2024-06-16T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A1203",
+    "title": "Innovators in Education: Research Paper",
+    "course": "RS112",
+    "available": "2024-06-17T00:00",
+    "due": "2024-06-24T23:59",
+    "points": "100"
+  },
+
+  {
+    "_id": "A1301",
+    "title": "Ethical Theories in Christianity",
+    "course": "RS113",
+    "available": "2024-06-01T00:00",
+    "due": "2024-06-08T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A1302",
+    "title": "Moral Dilemmas and Biblical Responses",
+    "course": "RS113",
+    "available": "2024-06-09T00:00",
+    "due": "2024-06-16T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A1303",
+    "title": "Case Studies in Christian Ethics",
+    "course": "RS113",
+    "available": "2024-06-17T00:00",
+    "due": "2024-06-24T23:59",
+    "points": "100"
+  },
+
+  {
+    "_id": "A1401",
+    "title": "Historical Context of Early Christianity",
+    "course": "RS114",
+    "available": "2024-06-01T00:00",
+    "due": "2024-06-08T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A1402",
+    "title": "The Apostolic Fathers: Influence and Writings",
+    "course": "RS114",
+    "available": "2024-06-09T00:00",
+    "due": "2024-06-16T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A1403",
+    "title": "Early Church Practices and Beliefs",
+    "course": "RS114",
+    "available": "2024-06-17T00:00",
+    "due": "2024-06-24T23:59",
+    "points": "100"
+  },
+
+  {
+    "_id": "A1501",
+    "title": "Community Service Project Proposal",
+    "course": "RS115",
+    "available": "2024-06-01T00:00",
+    "due": "2024-06-08T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A1502",
+    "title": "Leadership Styles in Christian Contexts",
+    "course": "RS115",
+    "available": "2024-06-09T00:00",
+    "due": "2024-06-16T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A1503",
+    "title": "Ethical Leadership in Faith Communities",
+    "course": "RS115",
+    "available": "2024-06-17T00:00",
+    "due": "2024-06-24T23:59",
+    "points": "100"
+  },
+
+  {
+    "_id": "A1601",
+    "title": "Introduction to Sufi Philosophy",
+    "course": "RS116",
+    "available": "2024-06-01T00:00",
+    "due": "2024-06-08T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A1602",
+    "title": "Mystical Practices in Sufism",
+    "course": "RS116",
+    "available": "2024-06-09T00:00",
+    "due": "2024-06-16T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A1603",
+    "title": "Influence of Sufism on Islamic Culture",
+    "course": "RS116",
+    "available": "2024-06-17T00:00",
+    "due": "2024-06-24T23:59",
+    "points": "100"
+  },
+
+  {
+    "_id": "A1701",
+    "title": "Exploring Islamic Ethical Frameworks",
+    "course": "RS117",
+    "available": "2024-06-01T00:00",
+    "due": "2024-06-08T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A1702",
+    "title": "Case Studies in Islamic Ethics",
+    "course": "RS117",
+    "available": "2024-06-09T00:00",
+    "due": "2024-06-16T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A1703",
+    "title": "Contemporary Issues in Islamic Ethics",
+    "course": "RS117",
+    "available": "2024-06-17T00:00",
+    "due": "2024-06-24T23:59",
+    "points": "100"
+  },
+
+  {
+    "_id": "A1801",
+    "title": "Foundations of Islamic Esotericism",
+    "course": "RS118",
+    "available": "2024-06-01T00:00",
+    "due": "2024-06-08T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A1802",
+    "title": "Key Texts in Esoteric Thought",
+    "course": "RS118",
+    "available": "2024-06-09T00:00",
+    "due": "2024-06-16T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A1803",
+    "title": "Esoteric Practices in Contemporary Islam",
+    "course": "RS118",
+    "available": "2024-06-17T00:00",
+    "due": "2024-06-24T23:59",
+    "points": "100"
+  },
+
+  {
+    "_id": "A1901",
+    "title": "Principles of Environmental Management in Ancient China",
+    "course": "RS119",
+    "available": "2024-06-01T00:00",
+    "due": "2024-06-08T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A1902",
+    "title": "Case Studies in Ancient Chinese Practices",
+    "course": "RS119",
+    "available": "2024-06-09T00:00",
+    "due": "2024-06-16T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A1903",
+    "title": "Lessons from Ancient Chinese Environmental Policies",
+    "course": "RS119",
+    "available": "2024-06-17T00:00",
+    "due": "2024-06-24T23:59",
+    "points": "100"
+  },
+
+  {
+    "_id": "A2001",
+    "title": "Mythological Figures and Leadership Qualities",
+    "course": "RS120",
+    "available": "2024-06-01T00:00",
+    "due": "2024-06-08T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A2002",
+    "title": "Interpreting Myths for Modern Leadership",
+    "course": "RS120",
+    "available": "2024-06-09T00:00",
+    "due": "2024-06-16T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A2003",
+    "title": "Cultural Insights from Chinese Mythology",
+    "course": "RS120",
+    "available": "2024-06-17T00:00",
+    "due": "2024-06-24T23:59",
+    "points": "100"
+  },
+
+  {
+    "_id": "A2101",
+    "title": "Overview of Hydraulic Systems in Ancient Cultures",
+    "course": "RS121",
+    "available": "2024-06-01T00:00",
+    "due": "2024-06-08T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A2102",
+    "title": "Innovations in Ancient Water Management",
+    "course": "RS121",
+    "available": "2024-06-09T00:00",
+    "due": "2024-06-16T23:59",
+    "points": "100"
+  },
+  {
+    "_id": "A2103",
+    "title": "Case Studies of Hydraulic Engineering",
+    "course": "RS121",
+    "available": "2024-06-17T00:00",
+    "due": "2024-06-24T23:59",
+    "points": "100"
   }
+
 ]

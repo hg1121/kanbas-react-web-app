@@ -1,4 +1,5 @@
-[{
+[
+  {
     "_id": "123",
     "username": "iron_man",
     "password": "stark123",
@@ -109,4 +110,75 @@
     "section": "S101",
     "lastActivity": "2020-11-11",
     "totalActivity": "21:32:43"
-  }]
+  },
+  {
+    "_id": "901",
+    "username": "spider_man",
+    "password": "parker123",
+    "firstName": "Peter",
+    "lastName": "Parker",
+    "email": "peter@spiderman.com",
+    "dob": "1996-08-10",
+    "role": "STUDENT",
+    "loginId": "001234570S",
+    "section": "S101",
+    "lastActivity": "2021-01-01",
+    "totalActivity": "5:12:18"
+  },
+  {
+    "_id": "012",
+    "username": "wonder_woman",
+    "password": "amazon123",
+    "firstName": "Diana",
+    "lastName": "Prince",
+    "email": "diana@themyscira.com",
+    "dob": "1984-02-03",
+    "role": "STUDENT",
+    "loginId": "001234571S",
+    "section": "S101",
+    "lastActivity": "2021-02-15",
+    "totalActivity": "3:44:30"
+  },
+  {
+    "_id": "1234",
+    "username": "deadpool",
+    "password": "wade123",
+    "firstName": "Wade",
+    "lastName": "Wilson",
+    "email": "wade@deadpool.com",
+    "dob": "1991-11-11",
+    "role": "STUDENT",
+    "loginId": "001234572S",
+    "section": "S101",
+    "lastActivity": "2021-03-25",
+    "totalActivity": "4:10:55"
+  },
+  {
+    "_id": "5678",
+    "username": "captain_america",
+    "password": "rogers123",
+    "firstName": "Steve",
+    "lastName": "Rogers",
+    "email": "steve@avengers.com",
+    "dob": "1921-07-04",
+    "role": "FACULTY",
+    "loginId": "001234573S",
+    "section": "S101",
+    "lastActivity": "2021-04-10",
+    "totalActivity": "8:30:15"
+  },
+  {
+    "_id": "9101",
+    "username": "loki",
+    "password": "godofmischief123",
+    "firstName": "Loki",
+    "lastName": "Laufeyson",
+    "email": "loki@asgard.com",
+    "dob": "964-02-20",
+    "role": "STUDENT",
+    "loginId": "001234574S",
+    "section": "S101",
+    "lastActivity": "2021-05-17",
+    "totalActivity": "7:22:33"
+  }
+]
