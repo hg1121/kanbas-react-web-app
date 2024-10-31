@@ -2,22 +2,38 @@ import ModulesControls from "./ModulesControls";
 import LessonControlButtons from "./LessonControlButtons";
 import ModuleControlButtons from "./ModuleControlButtons";
 import { BsGripVertical } from "react-icons/bs";
-import * as db from "../../Database";
-import { useMatch } from "react-router";
+import { useLocation } from "react-router";
+import { useState } from "react";
+import { addModule, editModule, updateModule, deleteModule } from "./reducer";
+import { useSelector, useDispatch } from "react-redux";
 
-interface ModulesProps {
-  cid?: string; // Make cid optional
-}
+export default function Modules() {
+  const location = useLocation();
+  const pathSegments = location.pathname.split('/'); // Split path by "/"
+  const courseId = pathSegments[3];
+  
+  const [moduleName, setModuleName] = useState("");
+  const { modules } = useSelector((state: any) => state.modulesReducer);
+  const dispatch = useDispatch();
 
-export default function Modules({ cid }: ModulesProps) {
-  // If cid is not passed as a prop, get it from the URL
-  const match = useMatch("/Kanbas/Courses/:cid/Modules");
-  const courseId = cid || match?.params.cid; // Use the prop first, fallback to match
-  const modules = db.modules;
+  const addNewModule = () => {
+    const newModule = {
+      _id: new Date().getTime().toString(),
+      lessons: [],
+      name: moduleName,
+      course: courseId,
+    };
+    dispatch(addModule(newModule));
+    setModuleName("");
+  };
 
   return (
     <div>
-      <ModulesControls />
+      <ModulesControls 
+        setModuleName={setModuleName} 
+        moduleName={moduleName} 
+        addModule={addNewModule}
+      />
       <br />
       <br />
       <br />
@@ -29,8 +45,25 @@ export default function Modules({ cid }: ModulesProps) {
           <li className=" list-group-item p-0 mb-5 fs-5 border-gray" key={index}>
             <div className="wd-title p-3 ps-2 bg-secondary">
               <BsGripVertical className="me-2 fs-md-2 fs-lg-3" /> 
-              <span className="fs-md-2 fs-lg-3">{module.name}</span> 
-              <ModuleControlButtons />
+              {/* <span className="fs-md-2 fs-lg-3">{module.name}</span>  */}
+              {!module.editing && module.name}
+              { module.editing && (
+                <input className="form-control w-50 d-inline-block"
+                      onChange={(e) => dispatch(updateModule({ ...module, name: e.target.value }))}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          dispatch(updateModule({ ...module, editing: false }));
+                        }
+                      }}
+                      defaultValue={module.name}/>
+              )}
+              <ModuleControlButtons 
+                moduleId={module._id} 
+                deleteModule={(moduleId) => {
+                  dispatch(deleteModule(moduleId));
+                }}
+                editModule={(moduleId) => dispatch(editModule(moduleId))}
+              />
             </div>
             {module.lessons && (
               <ul className="wd-lessons list-group rounded-0">

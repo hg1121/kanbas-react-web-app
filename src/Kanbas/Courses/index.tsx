@@ -3,24 +3,17 @@ import { FaAlignJustify } from "react-icons/fa6";
 import CoursesNavigation from "./Navigation";
 import Modules from "./Modules";
 import Home from "./Home";
-import { Navigate, Route, Routes, useMatch } from "react-router";
+import { Navigate, Route, Routes, useLocation } from "react-router";
 import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
 import PeopleTable from "./People/Table";
-export default function Courses() {
-  const match = useMatch("/Kanbas/Courses/:cid/*");
-  const cid = match?.params.cid;
-  const wildcard = match?.params['*']; 
-  // console.log(wildcard);
-  // console.log("MenuStandalone", match?.params);
-  // console.log("Extracted cid from URL:", cid);
+export default function Courses({ courses }: { courses: any[]; }) {
+  const location = useLocation();
+  const pathSegments = location.pathname.split('/'); // Split path by "/"
+  const cid = pathSegments[3];
+  const wildcard = pathSegments[4]
   let course = courses.find((course: { _id: string | object; }) => course._id === cid);
   // console.log(cid);
-
-  // If course is undefined, give a defult one
-  if (!course) {
-    course = courses[0]
-  }
 
   return (
     <div id="wd-courses">
@@ -41,7 +34,7 @@ export default function Courses() {
             <Route path={`/${course._id}/Assignments`} element={<Assignments />} />
             <Route
               path={`/${course._id}/Assignments/:aid`}
-              element={<AssignmentEditor cid={course._id}/>}
+              element={<AssignmentEditor />}
             />
             <Route path={`/${course._id}/People`} element={<PeopleTable />} />
           </Routes>

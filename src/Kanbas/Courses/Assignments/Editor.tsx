@@ -1,26 +1,62 @@
 import { FiChevronDown } from "react-icons/fi";
 import AssignTo from "./AssignTo";
-import * as db from "../../Database";
-import { useMatch } from "react-router";
-import { NavLink } from "react-router-dom";
+import { useMatch, useNavigate } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { addAssignment, updateAssignment } from "./reducer";
+import { useState } from "react";
 
-interface ModulesProps {
-  cid?: string; // Make cid optional
-}
+const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  const options: Intl.DateTimeFormatOptions = { 
+    year: 'numeric', 
+    month: '2-digit', 
+    day: '2-digit', 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    hour12: false 
+  };
+  return date.toLocaleString('en-US', options).replace(',', '');
+};
 
-export default function AssignmentEditor({ cid }: ModulesProps) {
-  const defaultDateTime = new Date(2024, 4, 13, 14, 30)
-    .toISOString()
-    .slice(0, 16);
+export default function AssignmentEditor() {
+  const location = useLocation();
+  const pathSegments = location.pathname.split('/'); // Split path by "/"
+  const cid = pathSegments[3];
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { newassignment, editing, originalPath } = location.state || {};
+  // console.log("newassignment", newassignment, "editing", editing)
   
-    const assignments = db.assignments;
-    const match = useMatch("/Kanbas/Courses/:cid/Assignments/:aid")
-    const course_id = cid || match?.params.cid;
-    const a_id = match?.params.aid;
-    // console.log(course_id);
-    // console.log(assignment_id);
-    const assignment = assignments.find((assignment: { _id: any; }) => assignment._id === a_id);
-    // console.log(assignment);
+  // const assignments = db.assignments;
+  const assignments = useSelector((state: any) => state.assignmentsReducer.assignments);
+  const match = useMatch("/Kanbas/Courses/:cid/Assignments/:aid")
+  const a_id = match?.params.aid;
+  // console.log(course_id);
+  // console.log(assignment_id);
+
+  const [assignment, setAssignment] = useState(assignments.find((assignment: { _id: any; }) => assignment._id === a_id) || newassignment);
+  // console.log("assignment", assignment);
+
+  const handleSave = () => {
+    // console.log(editing);
+    if (editing){
+      dispatch(updateAssignment(assignment));
+    }else{
+      // console.log("assignment", assignment);
+      dispatch(addAssignment(assignment));
+    }
+
+    setTimeout(() => {
+      navigate(`/Kanbas/Courses/${cid}/Assignments`);
+      // /Kanbas/Courses/RS101/Assignments
+    }, 100);
+  }
+
+  const handleCancel = () => {
+    navigate(`/Kanbas/Courses/${cid}/Assignments`);
+  }
+
 
   return (
     <div className="mx-5 w-60">
@@ -33,7 +69,11 @@ export default function AssignmentEditor({ cid }: ModulesProps) {
           className="form-control form-control-lg"
           id="exampleFormControlInput1"
           // placeholder="A1"
-          value={assignment? assignment.title : 'undefined'}
+          value={assignment.title}
+          onChange = {(e)=> {setAssignment((prevAssignment: any) => ({
+            ...prevAssignment,
+            title: e.target.value,
+          }))}}
         />
       </div>
 
@@ -45,14 +85,12 @@ export default function AssignmentEditor({ cid }: ModulesProps) {
                 className="form-control fs-5 mb-3"
                 id="exampleFormControlTextarea1"
                 rows={10}
+                onChange = {(e)=> {setAssignment((prevAssignment: any) => ({
+                  ...prevAssignment,
+                  desciption: e.target.value,
+                }))}}
               >
-                The assignment is available online. 
-                Submit a link to the landing page of your Web application running on Netlify. 
-                The landing page should include the following: Your full name and section
-                Links to each of the lab assignments Link to the Kanbas
-                application Links to all relevant source code repositories The
-                Kanbas application should include a link to navigate back to the
-                landing page.
+                {assignment.description}
               </textarea>
             </td>
           </tr>
@@ -68,7 +106,11 @@ export default function AssignmentEditor({ cid }: ModulesProps) {
                 type="text"
                 className="form-control form-control-lg rounded-1 mb-3"
                 id="wd-points"
-                value={assignment? assignment.points : 'undefine'}
+                value={assignment.points}
+                onChange={(e) => {setAssignment((prevAssignment: any) => ({
+                  ...prevAssignment,
+                  points: e.target.value,
+                }))}}
               />
             </td>
           </tr>
@@ -244,10 +286,13 @@ export default function AssignmentEditor({ cid }: ModulesProps) {
                   <input
                     type="datetime-local"
                     id="wd-due-date"
-                    value={assignment ? assignment.due : ""}
+                    value={assignment.due}
                     className="form-control"
                     width={100}
-                    // placeholder={assignment?.due}
+                    onChange = {(e)=> {setAssignment((prevAssignment: any) => ({
+                      ...prevAssignment,
+                      due: e.target.value,
+                    }))}}
                   />
                   <br />
                 </div>
@@ -258,8 +303,15 @@ export default function AssignmentEditor({ cid }: ModulesProps) {
                     <input
                       type="datetime-local"
                       id="wd-available-from"
-                      value={assignment? assignment.available : "2024-05-06T00:00"}
+                      value={assignment.available}
                       className="form-control"
+                      onChange={(e) => {
+                        console.log("assignment", assignment);
+                        setAssignment((prevAssignment: any) => ({
+                          ...prevAssignment,
+                          available: e.target.value,
+                        }));
+                      }}
                     />
                   </td>
 
@@ -268,8 +320,12 @@ export default function AssignmentEditor({ cid }: ModulesProps) {
                     <input
                       type="datetime-local"
                       id="wd-available-until"
-                      value={assignment? assignment.until : "2024-05-06T00:00"}
+                      value={assignment.until}
                       className="form-control"
+                      onChange = {(e)=> {setAssignment((prevAssignment: any) => ({
+                        ...prevAssignment,
+                        until: e.target.value,
+                      }))}}
                     />
                   </td>
                 </tr>
@@ -289,10 +345,10 @@ export default function AssignmentEditor({ cid }: ModulesProps) {
             className="text-end align-end"
             style={{ marginTop: "20px" }}
           >
-            <NavLink to={`/Kanbas/Courses/${cid}/Assignments`}>
-            <button className="btn btn-secondary me-2">Cancel</button>
-            <button className="btn btn-danger">Save</button>
-            </NavLink>
+            {/* <NavLink to={`/Kanbas/Courses/${cid}/Assignments`}> */}
+            <button className="btn btn-secondary me-2" onClick = {handleCancel}>Cancel</button>
+            <button className="btn btn-danger" onClick = {handleSave}>Save</button>
+            {/* </NavLink> */}
             
           </td>
         </tr>

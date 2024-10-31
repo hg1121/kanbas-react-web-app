@@ -7,7 +7,12 @@ import { GiNotebook } from "react-icons/gi";
 import LessonControlButtons from "../Modules/LessonControlButtons";
 import * as db from "../../Database";
 import { useMatch } from "react-router";
+import { useSelector} from "react-redux";
 import { Link } from "react-router-dom";
+import { FaTrash } from "react-icons/fa6";
+
+import { useEffect, useState } from "react";
+import MyModal from "./MyModal";
 
 const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
@@ -23,14 +28,33 @@ const formatDate = (dateString: string): string => {
 };
 
 export default function Assignments() {
-  const assignments = db.assignments;
+  // const assignments = db.assignments;
+  
+  const assignments = useSelector((state: any) => state.assignmentsReducer.assignments);
+  // console.log(assignments);
   const match = useMatch("/Kanbas/Courses/:cid/Assignments");
   const cid = match?.params.cid;
   // console.log(cid);
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [deleteAid, setDeleteAid] = useState("");
+  const handleDelete = (aid: any) => {
+    setDeleteAid(aid);
+    setModalOpen(!modalOpen);
+    setTimeout(() => {
+      setModalOpen(true);;
+    }, 100);
+    
+  }
+
+  useEffect(() => {
+    // console.log('Updated Assignments:', assignments);
+  }, [assignments]);
 
   return (
     <div id="wd-assignments">
-      <AssignmentButtons />
+      <AssignmentButtons cid={cid}/>
       <ul id="wd-modules" className="list-group rounded-0 d-flex flex-column">
       <li className="wd-title p-4 ps-2 bg-secondary d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center">
@@ -59,21 +83,29 @@ export default function Assignments() {
         {assignments
         .filter((assignment: any) => assignment.course === cid)
         .map((assignment: any, index: any) => (
-          <li className="wd-module list-group-item p-3 fs-5 border-gray d-flex justify-content-between align-items-center">
+          <li className="wd-module list-group-item p-3 fs-5 border-gray d-flex justify-content-between align-items-center" key ={index}>
           <span className="d-flex align-items-center">
             <BsGripVertical className="me-2 fs-3" />
             <GiNotebook className="me-2 fs-3 text-green" />
             <span>
-            <h4><a href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}className="no-decoration"> {assignment.title}</a></h4>
+            <h4>
+              {currentUser.role === "FACULTY" ? 
+               <Link to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`} state={{ editing: true }}className="no-decoration"> {assignment.title}</Link>
+              : assignment.title}
+              </h4>
               <span className="text-danger">Multiple Modules</span> |{" "}
               <b>Not available until </b>{formatDate(assignment.available)} | <br />
               <b>Due </b>{formatDate(assignment.due)} | {assignment.points} pts
             </span>
           </span>
+          <div>
+          {currentUser.role === "FACULTY" && <FaTrash className="text-danger me-2 mb-1" onClick={() => {handleDelete(assignment._id)}}/>}
           <LessonControlButtons />
+          </div>
         </li>
         ))}
       </ul>
+    {modalOpen && <MyModal modalOpen = {modalOpen} aid={deleteAid}/>}
     </div>
   );
 }
