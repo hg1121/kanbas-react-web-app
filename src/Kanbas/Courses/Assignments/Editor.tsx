@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { addAssignment, updateAssignment } from "./reducer";
 import { useState } from "react";
+import * as CourseClient from "../client"
 
 const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
@@ -25,11 +26,12 @@ export default function AssignmentEditor() {
   const cid = pathSegments[3];
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { newassignment, editing, originalPath } = location.state || {};
+  const { newassignment, editing} = location.state || {};
   // console.log("newassignment", newassignment, "editing", editing)
   
   // const assignments = db.assignments;
   const assignments = useSelector((state: any) => state.assignmentsReducer.assignments);
+  // const assignments = CourseClient.fetchAssignments(cid);
   const match = useMatch("/Kanbas/Courses/:cid/Assignments/:aid")
   const a_id = match?.params.aid;
   // console.log(course_id);
@@ -42,21 +44,21 @@ export default function AssignmentEditor() {
     // console.log(editing);
     if (editing){
       dispatch(updateAssignment(assignment));
+      CourseClient.updateAssignment(cid, assignment);
     }else{
       // console.log("assignment", assignment);
       dispatch(addAssignment(assignment));
+      CourseClient.createAssignment(cid, assignment);
     }
 
     setTimeout(() => {
-      navigate(`/Kanbas/Courses/${cid}/Assignments`);
-      // /Kanbas/Courses/RS101/Assignments
+     navigate(`/Kanbas/Courses/${cid}/Assignments`);
     }, 100);
   }
 
   const handleCancel = () => {
     navigate(`/Kanbas/Courses/${cid}/Assignments`);
   }
-
 
   return (
     <div className="mx-5 w-60">

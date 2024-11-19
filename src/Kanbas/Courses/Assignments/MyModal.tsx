@@ -2,28 +2,29 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { deleteAssignment } from "./reducer";
-import { useSelector, useDispatch } from "react-redux";
+import * as CourseClient from "../client"
 
 interface MyModalProps {
     modalOpen: boolean;
-    aid: String;
+    aid: string;
+    cid: string;
+    assignments: Array<any>; // Use a more specific type instead of `any` if possible
+    setAssignments: React.Dispatch<React.SetStateAction<Array<any>>>; // State updater function
   }
 
-export default function MyModal({ modalOpen, aid}: MyModalProps) {
+export default function MyModal({ modalOpen, aid, cid, assignments, setAssignments}: MyModalProps, ) {
     // console.log("aid",aid);
-    const dispatch = useDispatch();
     const [open, setOpen] = React.useState(modalOpen);
 
     const handleClose = () => {
         setOpen(false);
     };
 
-    const handleDelete = () => {
-        dispatch(deleteAssignment(aid));
+    const handleDelete = async () => {
+        CourseClient.deleteAssignment(cid, aid);
+        const updatedAssignments = assignments.filter((assignment) => assignment._id !== aid); // Remove locally
+        setAssignments(updatedAssignments);
         setOpen(false);
     }
 
@@ -38,12 +39,6 @@ export default function MyModal({ modalOpen, aid}: MyModalProps) {
         <DialogTitle id="alert-dialog-title">
           Are you sure to remove the assignment?
         </DialogTitle>
-        {/* <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous
-            location data to Google, even when no apps are running.
-          </DialogContentText>
-        </DialogContent> */}
         <DialogActions>
           <Button onClick={handleClose} autoFocus>Cancel</Button>
           <Button onClick={handleDelete} >

@@ -4,14 +4,17 @@ import Dashboard from "./Dashboard";
 import KanbasNavigation from "./Navigation";
 import Courses from "./Courses";
 import "./index.css";
-import * as db from "./Database";
-import { useState } from "react";
-import store from "./store";
-import { Provider } from "react-redux";
+// import * as db from "./Database";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import ProtectedRoute from "./Account/ProtectedRoute";
+import Session from "./Account/Session";
+
+import * as userClient from "./Account/client";
+import * as courseClient from "./Courses/client";
 
 export default function Kanbas() {
-  const [courses, setCourses] = useState<any[]>(db.courses);
+  const [courses, setCourses] = useState<any[]>([]);
   const [course, setCourse] = useState<any>({
     _id: "1234",
     // _id: new Date().getTime().toString(),
@@ -23,16 +26,42 @@ export default function Kanbas() {
     src: "/images/AncientChinese.jpg"
   });
 
-  const addNewCourse = () => {
-    setCourse({...course, _id: new Date().getTime().toString()});
-    setCourses([ ...courses, course]);
-    // setCourse({...course, name: "New Course", description: "New Description"});
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const fetchCourses = async () => {
+    try {
+      // console.log("Fetching courses...");
+      const courses = await userClient.findMyCourses();
+      // console.log("Backend response:", courses); // Log the fetched data
+      setCourses(courses);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    }
   };
 
-  const deleteCourse = (courseId: any) => {
+  const addNewCourse = async () => {
+    const newCourse = {
+      ...course,
+      _id: new Date().getTime().toString(),
+    };
+  
+    try {
+      await userClient.createCourse(newCourse); // Add course to the backend
+      await fetchCourses(); // Refetch all courses
+      setCourses([...courses, newCourse]);
+      setCourse({ ...course, name: "New Course", description: "New Description" }); 
+      // Reset form
+    } catch (error) {
+      console.error("Error adding new course:", error);
+    }
+  };
+
+  const deleteCourse = async (courseId: string) => {
+    const status = await courseClient.deleteCourse(courseId);
     setCourses(courses.filter((course) => course._id !== courseId));
   };
-  const updateCourse = () => {
+
+  const updateCourse = async () => {
+    await courseClient.updateCourse(course);
     setCourses(
       courses.map((c) => {
         if (c._id === course._id) {
@@ -45,8 +74,13 @@ export default function Kanbas() {
     // setCourse({...course, name: "New Course", description: "New Description"});
   };
 
+  useEffect(() => {
+    // console.log("Current User:", currentUser);
+    fetchCourses();
+  }, [currentUser]);
+
   return (
-    <Provider store={store}>
+    <Session>
     <div id="wd-kanbas">
       <KanbasNavigation />
       <div className="wd-main-content-offset p-3">
@@ -74,7 +108,8 @@ export default function Kanbas() {
         </Routes>
       </div>
     </div>
-    </Provider>
+    </Session>
+    
   );
 }
 

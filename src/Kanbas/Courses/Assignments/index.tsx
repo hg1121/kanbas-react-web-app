@@ -6,13 +6,14 @@ import { FiPlus } from "react-icons/fi";
 import { GiNotebook } from "react-icons/gi";
 import LessonControlButtons from "../Modules/LessonControlButtons";
 import * as db from "../../Database";
-import { useMatch } from "react-router";
+import { useLocation } from "react-router";
 import { useSelector} from "react-redux";
 import { Link } from "react-router-dom";
 import { FaTrash } from "react-icons/fa6";
 
 import { useEffect, useState } from "react";
 import MyModal from "./MyModal";
+import * as CourseClient from "../client"
 
 const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
@@ -28,14 +29,22 @@ const formatDate = (dateString: string): string => {
 };
 
 export default function Assignments() {
-  // const assignments = db.assignments;
-  
-  const assignments = useSelector((state: any) => state.assignmentsReducer.assignments);
-  // console.log(assignments);
-  const match = useMatch("/Kanbas/Courses/:cid/Assignments");
-  const cid = match?.params.cid;
-  // console.log(cid);
+  const location = useLocation();
+  const pathSegments = location.pathname.split('/'); // Split path by "/"
+  const cid = pathSegments[3];
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+
+  const [assignments, setAssignments] = useState<any[]>([]);
+
+  const fetchAllAssignments = async(cid: string) => {
+    let assignments = [];
+    try{
+      assignments = await CourseClient.fetchAssignments(cid);
+    }catch(error){
+      console.error(error);
+    }
+    setAssignments(assignments);
+  }
 
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteAid, setDeleteAid] = useState("");
@@ -50,7 +59,8 @@ export default function Assignments() {
 
   useEffect(() => {
     // console.log('Updated Assignments:', assignments);
-  }, [assignments]);
+    fetchAllAssignments(cid);
+  }, []);
 
   return (
     <div id="wd-assignments">
@@ -90,7 +100,7 @@ export default function Assignments() {
             <span>
             <h4>
               {currentUser.role === "FACULTY" ? 
-               <Link to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`} state={{ editing: true }}className="no-decoration"> {assignment.title}</Link>
+               <Link to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`} state={{ newassignment: assignment, editing: true }}className="no-decoration"> {assignment.title}</Link>
               : assignment.title}
               </h4>
               <span className="text-danger">Multiple Modules</span> |{" "}
@@ -105,7 +115,7 @@ export default function Assignments() {
         </li>
         ))}
       </ul>
-    {modalOpen && <MyModal modalOpen = {modalOpen} aid={deleteAid}/>}
+    {modalOpen && <MyModal modalOpen = {modalOpen} aid={deleteAid} cid={cid} assignments = {assignments} setAssignments = {setAssignments}/>}
     </div>
   );
 }
