@@ -3,10 +3,14 @@ import { FaAlignJustify } from "react-icons/fa6";
 import CoursesNavigation from "./Navigation";
 import Modules from "./Modules";
 import Home from "./Home";
+import Quizzes from "./Quizzes";
+
 import { Navigate, Route, Routes, useLocation } from "react-router";
 import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
 import PeopleTable from "./People/Table";
+import QuizEditor from "./Quizzes/QuizEditor";
+
 export default function Courses({ courses }: { courses: any[]; }) {
   const location = useLocation();
   const pathSegments = location.pathname.split('/'); // Split path by "/"
@@ -35,6 +39,11 @@ export default function Courses({ courses }: { courses: any[]; }) {
             <Route
               path={`/${course._id}/Assignments/:aid`}
               element={<AssignmentEditor />}
+            />
+            <Route path={`/${course._id}/Quizzes`} element={<Quizzes />} />
+            <Route
+              path={`/${course._id}/Quizzes/:qid`}
+              element={<QuizEditor />}
             />
             <Route path={`/${course._id}/People`} element={<PeopleTable />} />
           </Routes>
