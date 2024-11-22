@@ -1,16 +1,36 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { useMatch } from "react-router";
+import { useNavigate } from 'react-router-dom';
+// import { useState } from 'react';
+
 export default function CoursesNavigation() {
+  const navigate = useNavigate();
+  
+  const links = ["Home", "Modules", "Piazza", "Zoom", "Assignments", "Quizzes", "Grades", "People"];
+  const match = useMatch("/Kanbas/Courses/:cid/*");
+  // console.log(match);
+  const cid = match?.params.cid;
+  // const [selectedCourseId, setSelectedCourseId] = useState(cid);
+
+  // console.log(cid);
   return (
-    <ul id="wd-courses-navigation">
-      <li><Link id="wd-course-home-link"    to="/Kanbas/Courses/1234/Home">Home</Link><br/></li>
-      <li><Link id="wd-course-modules-link" to="/Kanbas/Courses/1234/Modules">Modules</Link><br/></li>
-      <li><Link id="wd-course-piazza-link"  to="/Kanbas/Courses/1234/Piazza">Piazza</Link><br/></li>
-      <li><Link id="wd-course-zoom-link"    to="/Kanbas/Courses/1234/Zoom">Zoom</Link><br/></li>
-      <li><Link id="wd-course-quizzes-link" to="/Kanbas/Courses/1234/Assignments">Assignments</Link><br/></li>
-      <li><Link id="wd-course-assignments-link" to="/Kanbas/Courses/1234/Quizzes">Quizzes</Link><br/></li>
-      <li><Link id="wd-course-grades-link"  to="/Kanbas/Courses/1234/Grades">Grades</Link><br/></li>
-      <li> <Link id="wd-course-people-link"  to="/Kanbas/Courses/1234/People">People</Link><br/></li>
-    </ul>
+    <div id="wd-courses-navigation" className="wd list-group fs-5 rounded-0">
+      {links.map((link, index) => (
+        <>
+        <NavLink to={`/Kanbas/Courses/${cid}/${link}`} id="wd-course-home-link"
+        className={({ isActive }) => `list-group-item border border-0 ${isActive ? "active" : "inactive"}`}
+        key={index}
+        > {link} </NavLink>
+        <br />
+        </> 
+      ))}
+    </div>
 );}
 
-export {};
+// "list-group-item active border border-0"
+
+// {({ isActive }) =>
+//           `list-group-item text-center border-0 ${
+//             isActive ? "bg-white text-danger" : "bg-black text-white "
+//           }`
+//         }
