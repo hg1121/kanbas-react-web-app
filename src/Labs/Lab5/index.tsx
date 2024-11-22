@@ -12,6 +12,10 @@ export default function Lab5() {
       <div id="wd-lab5" className="m-3">
         <h2>Lab 5</h2>
         <div className="list-group">
+          {/* <a href="https://kanbas-node-server-app-1-n0tk.onrender.com/lab5/welcome"          
+             className="list-group-item">
+             Welcome
+          </a> */}
           <a href="https://kanbas-node-server-app-1-n0tk.onrender.com/lab5/welcome"          
              className="list-group-item">
              Welcome
