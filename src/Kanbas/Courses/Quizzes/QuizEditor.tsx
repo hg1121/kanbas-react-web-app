@@ -9,20 +9,29 @@ export default function QuizEditor() {
     const pathSegments = location.pathname.split("/"); // Split path by "/"
     const courseId = pathSegments[3];
     const quizId = pathSegments[5];
-    console.log(courseId, quizId);
+    // console.log(courseId, quizId);
     
-    const [quiz, setQuiz] = useState<any>({});
-    const [isEditing, setIsEditing] = useState(false);
+    const [quiz, setQuiz ]= useState(location.state?.quiz || location.state?.selectedQuiz);
+    const [editing, setEditing] = useState(location.state?.editing)
 
     useEffect(() => {
-        setQuiz(QuizClient.fetchQuiz(courseId, quizId));
-        console.log(quiz);
-    }, [courseId, quizId]);
+        // // Fetch the quiz data
+        // const fetchQuiz = async () => {
+        //     try {
+        //         const quizData = await QuizClient.fetchQuiz(courseId, quizId);
+        //         setQuiz(quizData); // Set the quiz data after fetching
+        //     } catch (error) {
+        //         console.error("Error fetching quiz", error);
+        //     }
+        // };
+
+        // fetchQuiz(); // Call the function to fetch quiz data
+    }, [courseId, quizId]); // Re-run this effect if courseId or quizId changes
 
     const saveQuiz = async () => {
         try {
             await axios.put(`/api/courses/${courseId}/quizzes/${quizId}`, quiz);
-            setIsEditing(false); // Disable editing
+            setEditing(false); // Disable editing
         } catch (error) {
             console.error("Error saving quiz", error);
         }
@@ -30,8 +39,8 @@ export default function QuizEditor() {
 
     return (
         <div>
-            <h1>{isEditing ? "Edit Quiz" : quiz.title}</h1>
-            {isEditing ? (
+            <h1>{editing ? "Edit Quiz" : quiz.title}</h1>
+            {editing ? (
                 <div>
                     <input
                         type="text"
@@ -47,7 +56,7 @@ export default function QuizEditor() {
             ) : (
                 <div>
                     <p>{quiz.title}</p>
-                    <button onClick={() => setIsEditing(true)}>Edit</button>
+                    <button onClick={() => setEditing(true)}>Edit</button>
                 </div>
             )}
         </div>

@@ -8,10 +8,32 @@ import { useNavigate, useLocation } from "react-router-dom";
 export default function QuizzesButtons() {
   const location = useLocation();
   const pathSegments = location.pathname.split("/"); // Split path by "/"
-  const cid = pathSegments[3];
+  const courseId = pathSegments[3];
 
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const [addQuiz, setAddQuiz] = useState(false);
+  const newQuiz = {
+    id: "1234567",
+    title: "untitled new quiz",
+    courseId: courseId,
+    quizType: "Graded Quiz",
+    points: 50,
+    assignmentGroup: "Quizzes",
+    shuffleAnswers: true,
+    timeLimit: 20,
+    multipleAttempts: false,
+    howManyAttempts: 1,
+    showCorrectAnswers: "Immediately",
+    accessCode: "",
+    oneQuestionAtATime: true,
+    webcamRequired: false,
+    lockQuestionsAfterAnswering: false,
+    dueDate: "2024-12-15",
+    availableDate: "2024-12-01",
+    untilDate: "2024-12-20",
+    questions: [],
+    published: true
+  }
 
   const handleOnClick = () => {
     setAddQuiz(!addQuiz);
