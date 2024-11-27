@@ -4,16 +4,20 @@ import { FiPlus } from "react-icons/fi";
 import { IoEllipsisVertical } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
+import * as QuizClient from "./client";
 
 export default function QuizzesButtons() {
   const location = useLocation();
   const pathSegments = location.pathname.split("/"); // Split path by "/"
   const courseId = pathSegments[3];
+  const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
+  const COURSES_API = `${REMOTE_SERVER}/api/courses`;
 
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const [addQuiz, setAddQuiz] = useState(false);
+  const navigate = useNavigate();
   const newQuiz = {
-    id: "1234567",
+    quizId: "1234567",
     title: "untitled new quiz",
     courseId: courseId,
     quizType: "Graded Quiz",
@@ -35,9 +39,15 @@ export default function QuizzesButtons() {
     published: true
   }
 
-  const handleOnClick = () => {
+  const handleOnClick = async() => {
     setAddQuiz(!addQuiz);
+    const uniqueId = new Date().getTime().toString();
+    const quiz = {...newQuiz, quizId: uniqueId};
+    navigate(`${quiz.quizId}`, { state: { quiz} });
+    await QuizClient.addQuiz(courseId, quiz);
   };
+
+  
   return (
     <>
     <div className="d-flex align-items-stretch justify-content-between p-0 my-2 assignment-header-bar">

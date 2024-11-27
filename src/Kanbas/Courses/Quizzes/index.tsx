@@ -29,7 +29,6 @@ export default function QuizList() {
   const pathSegments = location.pathname.split("/"); // Split path by "/"
   const courseId = pathSegments[3];
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const [quiz, setQuiz] = useState({});
   const [quizzes, setQuizzes] = useState<any[]>([]);
 
   const fetchQuizzesForCourse = async () => {
@@ -41,16 +40,18 @@ export default function QuizList() {
 
   // Fetch quizzes on load
   useEffect(() => {
+    console.log('quiz list rerendered');
     fetchQuizzesForCourse();
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [courseId]);
+  }, [courseId, location]);
 
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   const menuRef = useRef<HTMLDivElement | null>(null);
   const [selectedQuiz, setSelectedQuiz] = useState<any>(null); // Store clicked quiz
+
   const deleteQuiz = async (quizId: string) => {
     try {
       await axios.delete(`/api/courses/${courseId}/quizzes/${quizId}`);
@@ -76,6 +77,12 @@ export default function QuizList() {
       setContextOpen(false); // Close menu if clicked outside
     }
   };
+
+  const handleDelete = async(selectedQuiz: any) => {
+    await QuizClient.deleteQuiz(courseId, selectedQuiz.quizId);
+    fetchQuizzesForCourse();
+    setContextOpen(false);
+  }
 
   const isOpen = (avaliable: any, dueDate: any) => {
     const currentDate = new Date(); // Get the current date and time
@@ -112,7 +119,7 @@ export default function QuizList() {
                     {currentUser.role === "FACULTY" ? (
                       <Link
                         to={`/Kanbas/Courses/${courseId}/Quizzes/${quiz.quizId}`}
-                        state={{ quiz, editing: true }}
+                        state={{quiz}}
                       >
                         {quiz.title}
                       </Link>
@@ -157,12 +164,12 @@ export default function QuizList() {
           }}
         >
           <Link className="dropdown-item" to={`/Kanbas/Courses/${courseId}/Quizzes/${selectedQuiz.quizId}`}
-                        state={{ selectedQuiz, editing: true }}>
+                        state={{ selectedQuiz}}>
             Edit
           </Link>
-          <Link className="dropdown-item" to="#">
+          <li className="dropdown-item" onClick={() => {handleDelete(selectedQuiz)}}>
             DELETE
-          </Link>
+          </li>
           <a className="dropdown-item" href="#">
             Publish
           </a>
@@ -174,7 +181,6 @@ export default function QuizList() {
           </Link>
         </div>
       )}
-      {/* {modalOpen && <MyModal modalOpen = {modalOpen} aid={deleteAid} cid={cid} assignments = {assignments} setAssignments = {setAssignments}/>} */}
     </div>
   );
 }

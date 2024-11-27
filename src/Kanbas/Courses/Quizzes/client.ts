@@ -12,3 +12,17 @@ export const fetchQuiz = async(courseId: string, quizId: string) => {
     const {data} = await axios.get(`${COURSES_API}/${courseId}/quizzes/${quizId}`);
     return data;
 }
+
+export const addQuiz = async(courseId: string, quiz: any) => {
+    const {data} = await axios.post(`${COURSES_API}/${courseId}/quizzes/`, quiz);
+    return data;
+}
+
+export const updateQuiz = async(courseId: string, quizId: string, newQuiz: any) => {
+    const {data} = await axios.put(`${COURSES_API}/${courseId}/quizzes/${quizId}`, newQuiz);
+    return data;
+}
+
+export const deleteQuiz = async(courseId: string, quizId: string) => {
+    await axios.delete(`${COURSES_API}/${courseId}/quizzes/${quizId}`);
+}

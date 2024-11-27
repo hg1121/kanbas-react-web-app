@@ -9,7 +9,7 @@ import { Navigate, Route, Routes, useLocation } from "react-router";
 import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
 import PeopleTable from "./People/Table";
-import QuizEditor from "./Quizzes/QuizEditor";
+import QuizEditor from "./Quizzes/QuizDetail";
 
 export default function Courses({ courses }: { courses: any[]; }) {
   const location = useLocation();

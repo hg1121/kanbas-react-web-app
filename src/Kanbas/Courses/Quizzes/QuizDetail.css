@@ -1,0 +1,28 @@
+.quiz-table {
+    width: 100%;
+    border-collapse: collapse; /* Collapse borders */
+    margin: 20px 0;
+  }
+
+  .btns {
+    display: flex;            /* Enable flexbox */
+    justify-content: center;  /* Horizontally center the buttons */
+    align-items: center;      /* Vertically center the buttons */   
+  }
+  
+  .quiz-row {
+    display: flex; /* Use Flexbox to align content */
+    justify-content: space-between; /* Space between label and value */
+    align-items: center; /* Vertically center */
+  }
+  
+  .quiz-label {
+    text-align: right; /* Align the label text to the right */
+    width: 40%; /* Adjust width to your preference */
+    padding-right: 10px; /* Add space between label and value */
+  }
+  
+  .quiz-value {
+    text-align: left; /* Align the value text to the left */
+    width: 60%; /* Adjust width to your preference */
+  }
