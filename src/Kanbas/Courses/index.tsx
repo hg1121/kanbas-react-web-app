@@ -7,13 +7,15 @@ import { Navigate, Route, Routes, useLocation } from "react-router";
 import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
 import PeopleTable from "./People/Table";
+import { useState } from "react";
 export default function Courses({ courses }: { courses: any[]; }) {
   const location = useLocation();
   const pathSegments = location.pathname.split('/'); // Split path by "/"
   const cid = pathSegments[3];
   const wildcard = pathSegments[4]
-  let course = courses.find((course: { _id: string | object; }) => course._id === cid);
-  // console.log(cid);
+  // console.log("courses", courses);
+  // const [parentCourses, setCourses] = useState(courses);
+  let course = courses?.find((course: { _id: string | object; }) => course._id === cid);
 
   return (
     <div id="wd-courses">
