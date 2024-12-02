@@ -47,8 +47,11 @@ export default function Modules() {
 
 
   useEffect(() => {
-    fetchModules();
-  }, [modules]);
+    // Fetch modules only when `courseId` changes or on component mount
+    if (courseId) {
+      fetchModules();
+    }
+  }, [courseId]); // Depend only on `courseId`
 
   return (
     <div>

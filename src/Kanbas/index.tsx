@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./Account/ProtectedRoute";
 import Session from "./Account/Session";
+import CourseImagesSrc from "./Courses/newCourseImage";
 
 import * as userClient from "./Account/client";
 import * as courseClient from "./Courses/client";
@@ -23,7 +24,7 @@ export default function Kanbas() {
     startDate: "2023-09-10",
     endDate: "2023-12-15",
     description: "New Description",
-    src: "/images/AncientChinese.jpg"
+    src: CourseImagesSrc
   });
 
   const { currentUser } = useSelector((state: any) => state.accountReducer);
@@ -33,7 +34,7 @@ export default function Kanbas() {
     try {
       // console.log("currentUser._id", currentUser._id);
       const courses = await userClient.findCoursesForUser(currentUser._id);
-      
+
       setCourses(courses);
     } catch (error) {
       console.error(error);
