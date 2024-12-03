@@ -17,8 +17,9 @@ export default function Courses({ courses }: { courses: any[]; }) {
   const pathSegments = location.pathname.split('/'); // Split path by "/"
   const cid = pathSegments[3];
   const wildcard = pathSegments[4]
-  let course = courses.find((course: { _id: string | object; }) => course._id === cid);
-  // console.log(cid);
+  // console.log("courses", courses);
+  // const [parentCourses, setCourses] = useState(courses);
+  let course = courses?.find((course: { _id: string | object; }) => course._id === cid);
 
   return (
     <div id="wd-courses">

@@ -60,6 +60,12 @@ export default function AssignmentEditor() {
     navigate(`/Kanbas/Courses/${cid}/Assignments`);
   }
 
+  // Format MongoDB Date to HTML `datetime-local`
+  const formatDateForInput = (date: string | undefined) => {
+    if (!date) return "";
+    return new Date(date).toISOString().slice(0, 16); // Ensure correct datetime-local format
+  };
+
   return (
     <div className="mx-5 w-60">
       <div className="mb-4">
@@ -288,7 +294,7 @@ export default function AssignmentEditor() {
                   <input
                     type="datetime-local"
                     id="wd-due-date"
-                    value={assignment.due}
+                    value={formatDateForInput(assignment.due)}
                     className="form-control"
                     width={100}
                     onChange = {(e)=> {setAssignment((prevAssignment: any) => ({
@@ -305,7 +311,7 @@ export default function AssignmentEditor() {
                     <input
                       type="datetime-local"
                       id="wd-available-from"
-                      value={assignment.available}
+                      value={formatDateForInput(assignment.available)}
                       className="form-control"
                       onChange={(e) => {
                         console.log("assignment", assignment);
@@ -322,7 +328,7 @@ export default function AssignmentEditor() {
                     <input
                       type="datetime-local"
                       id="wd-available-until"
-                      value={assignment.until}
+                      value={formatDateForInput(assignment.until)}
                       className="form-control"
                       onChange = {(e)=> {setAssignment((prevAssignment: any) => ({
                         ...prevAssignment,
