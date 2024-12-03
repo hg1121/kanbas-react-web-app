@@ -146,7 +146,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
              onChange={(e) => setCourse({ ...course, description: e.target.value }) } />
       </>}
       <h2 id="wd-dashboard-published"> Published Courses ({currentUser.role === "FACULTY" ? courses.length: studentCourses.length})
-      {currentUser.role === "STUDENT" && 
+      {currentUser.role === "STUDENT" || currentUser.role === "USER" && 
       <button className="btn btn-primary float-end rounded-1" onClick={handleEnrollmentsClick}>Enrollments</button>}
       </h2> 
       
@@ -194,7 +194,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
             </div>
           )))}
 
-          {currentUser.role === "STUDENT" &&
+          {currentUser.role === "STUDENT" || currentUser.role === "USER" &&
             studentCourses.map((course:any) => {
               const isEnrolled = enrollments.some(
                 (enrollment: any) =>
