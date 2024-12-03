@@ -18,14 +18,6 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
     const {currentUser } = useSelector((state: any) => state.accountReducer);
     const {enrollments} = useSelector((state: any) => state.enrollmentsReducer);
     
-    // const [displayCourses, setDisplayCourses] = useState(courses.filter((course) =>
-    //         enrollments.some(
-    //           (enrollment:any) =>
-    //             enrollment.user === currentUser._id &&
-    //             enrollment.course === course._id
-    //       )));
-  // console.log(currentUser);
-
     const handleUpdateButton = () => {
       updateCourse();
       setCourse({ ...course, name: "New Course", description: "New Description", src: "/images/AncientChinese.jpg" }); 
@@ -43,6 +35,32 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
       updateEnrollment(course._id, false);
       deleteCourse(course._id);
     }
+    
+    const [enrollmentStatuses, setEnrollmentStatuses] = useState<{ [key: string]: boolean }>({});
+
+    const fetchEnrollmentStatuses = async (courseId: any) => {
+      const response = await courseClient.checkUserEnrollment(currentUser._id, courseId);
+      return response;
+    };
+
+    useEffect(() => {
+      const fetchEnrollments = async () => {
+        const statuses: { [key: string]: boolean } = {};
+
+        // Use Promise.all to await all the async operations concurrently
+        await Promise.all(
+          courses.map(async (course) => {
+            const isEnrolled = await fetchEnrollmentStatuses(course._id);
+            statuses[course._id] = isEnrolled;
+          })
+        );
+
+        setEnrollmentStatuses(statuses); // Update the state with enrollment statuses
+      };
+
+      fetchEnrollments(); // Fetch enrollments when component mounts or courses change
+    }, [currentUser, courses]);
+
   return (
     <Provider store={store}>
     <div id="wd-dashboard">
@@ -65,17 +83,13 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
       <textarea value={course.description} className="form-control"
              onChange={(e) => setCourse({ ...course, description: e.target.value }) } />
       </>}
-      <h2 id="wd-dashboard-published"> Published Courses ({courses.length})
-      {/* {currentUser.role === "STUDENT" && 
-      <button className="btn btn-primary float-end rounded-1" onClick={handleEnrollmentsClick}>Enrollments</button>} */}
-      </h2> 
+      <h2 id="wd-dashboard-published"> Published Courses ({courses.length})</h2> 
       
       <hr />
       <div id="wd-dashboard-courses" className="row">
         <div className="row row-cols-1 row-cols-md-5 g-4">
-          {currentUser.role === "FACULTY" && (
-          courses   
-          .map((course, index) => (
+          {(currentUser.role === "FACULTY" || currentUser.role === "ADMIN") && (
+          courses.map((course, index) => (
             <div className="wd-dashboard-course col" style={{ width: "300px" }} key={index}>
               <div className="card rounded-3 overflow-hidden">
                 <Link to={`/Kanbas/Courses/${course._id}/Home` }
@@ -124,13 +138,9 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
             </div>
           )))}
 
-          {currentUser.role === "STUDENT" &&
+          {(currentUser.role === "STUDENT" || currentUser.role === "USER") &&
             courses.map((course:any) => {
-              const isEnrolled = enrollments.some(
-                (enrollment: any) =>
-                  enrollment.user === currentUser._id && enrollment.course === course._id
-              );
-
+              const isEnrolled = enrollmentStatuses[course._id];
               return (
                 <div className="wd-dashboard-course col" style={{ width: "300px" }} key={course._id}>
                   <div className="card rounded-3 overflow-hidden">
@@ -145,14 +155,20 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
                           {course.description}
                         </p>
                         <Link
-                            to={isEnrolled ? `/Kanbas/Courses/${course._id}/Home` : "#"}
-                            className={`wd-dashboard-course-link text-decoration-none text-dark ${
-                              !isEnrolled && "disabled-link"
-                            }`}
-                            state={{ currentUser }}
-                          >
-                        <button className="btn btn-primary rounded-1">Go</button>
-                        </Link>
+                          to={isEnrolled ? `/Kanbas/Courses/${course._id}/Home` : "#"}
+                          className={`wd-dashboard-course-link text-decoration-none text-dark ${
+                            !isEnrolled && "disabled-link"
+                          }`}
+                          state={{ currentUser }}
+                          onClick={(e) => {
+                            // if (!isEnrolled) {
+                            //   e.preventDefault(); // Prevent navigation
+                            //   alert("You need to enroll in this course first.");
+                            // }
+                          }}
+                        >
+  <button className="btn btn-primary rounded-1">Go</button>
+</Link>
                         {enrolling && (
                           <button className={`btn ${ course.enrolled ? "btn-danger" : "btn-success" } float-end`} 
                           onClick={(event) => {

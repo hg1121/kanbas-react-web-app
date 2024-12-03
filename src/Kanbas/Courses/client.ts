@@ -27,6 +27,7 @@ export const createCourse = async (course: any) => {
     return data;
 };
 
+
 // ******** People
 export const findUsersForCourse = async (courseId: string) => {
     const response = await axios.get(`${COURSES_API}/${courseId}/users`);
@@ -85,3 +86,18 @@ export const deleteEnrollment = async(userId: string, courseId: string) => {
     const response = await axiosWithCredentials.delete(`${USERS_API}/${userId}/courses/${courseId}`);
     return response.data;
 }
+
+export const deleteAllEnrollFromDeletedCourse = async(userId: string, courseId: string) => {
+    const response = await axiosWithCredentials.delete(`${USERS_API}/${userId}/courses/${courseId}/enrollments`);
+    return response.data;
+}
+
+export const checkUserEnrollment = async (userId: string, courseId: string) => {
+    try {
+      const response = await axios.get(`${USERS_API}/${userId}/courses/${courseId}/enrolled`);
+      return response.data.enrolled; // true or false
+    } catch (error) {
+      console.error("Error checking enrollment:", error);
+      return false;
+    }
+  }

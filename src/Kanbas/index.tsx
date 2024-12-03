@@ -41,17 +41,6 @@ export default function Kanbas() {
     }
   };
 
-  // const fetchCourses = async () => {
-  //   try {
-  //     // console.log("Fetching courses...");
-  //     // const courses = await userClient.findMyCourses();
-  //     const courses = await courseClient.fetchAllCourses();
-  //     // console.log("Backend response:", courses); // Log the fetched data
-  //     setCourses(courses);
-  //   } catch (error) {
-  //     console.error("Error fetching courses:", error);
-  //   }
-  // };
   const fetchCourses = async () => {
     try {
       const allCourses = await courseClient.fetchAllCourses();
@@ -77,7 +66,7 @@ export default function Kanbas() {
   };
 
   const deleteCourse = async (courseId: string) => {
-    await courseClient.deleteEnrollment(currentUser._id, courseId);
+    await courseClient.deleteAllEnrollFromDeletedCourse(currentUser._id, courseId);
     const status = await courseClient.deleteCourse(courseId);
     setCourses(courses.filter((course) => course._id !== courseId));
   };
