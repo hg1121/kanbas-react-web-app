@@ -81,11 +81,20 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
     const handleEnrollmentsClick = () => {
       setDisplayAll((prevDisplayAll) => {
         const newDisplayAll = !prevDisplayAll;
+        // console.log("newDisplayAll", newDisplayAll);
         // Update displayCourses based on the new state
         if (newDisplayAll) {
           fetchAllCourses();
         } else {
-          setStudentCourses(courses);
+          setStudentCourses(
+            courses.filter((course) =>
+              enrollments.some(
+                (enrollment: any) =>
+                  enrollment.user === currentUser._id &&
+                  enrollment.course === course._id
+              )
+            )
+          );
         }
         return newDisplayAll; // Ensure state is correctly toggled
       });
@@ -100,7 +109,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
           course: course._id,
         })
       )
-      fetchAllCourses();
+      // fetchAllCourses();
       setStudentCourses(studentCourses.filter((course) =>
         enrollments.some(
             (enrollment: any) =>
@@ -113,7 +122,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
     const handleUnEnroll = async(course: any) => {
       await courseClient.deleteEnrollment(currentUser._id, course._id);
       dispatch(deleteEnrollment({userId: currentUser._id, cid: course._id}));
-      fetchAllCourses();
+      // fetchAllCourses();
       setStudentCourses(studentCourses.filter((course) =>
         enrollments.some(
             (enrollment: any) =>
@@ -146,7 +155,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
              onChange={(e) => setCourse({ ...course, description: e.target.value }) } />
       </>}
       <h2 id="wd-dashboard-published"> Published Courses ({currentUser.role === "FACULTY" ? courses.length: studentCourses.length})
-      {currentUser.role === "STUDENT" || currentUser.role === "USER" && 
+      {(currentUser.role === "STUDENT" || currentUser.role === "USER") && 
       <button className="btn btn-primary float-end rounded-1" onClick={handleEnrollmentsClick}>Enrollments</button>}
       </h2> 
       
@@ -194,7 +203,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
             </div>
           )))}
 
-          {currentUser.role === "STUDENT" || currentUser.role === "USER" &&
+          {(currentUser.role === "STUDENT" || currentUser.role === "USER") &&
             studentCourses.map((course:any) => {
               const isEnrolled = enrollments.some(
                 (enrollment: any) =>

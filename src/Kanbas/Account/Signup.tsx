@@ -12,9 +12,19 @@ export default function Signup() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const signup = async () => {
-    const currentUser = await client.signup(user);
-    dispatch(setCurrentUser(currentUser));
-    navigate("/Kanbas/Account/Profile");
+    try {
+      const currentUser = await client.signup(user);
+      dispatch(setCurrentUser(currentUser));
+      navigate("/Kanbas/Account/Profile");
+    } catch (error: any) {
+      // Check if error contains a response and a message
+      if (error.response && error.response.data && error.response.data.message) {
+        alert(`Signup failed: ${error.response.data.message}`);
+      } else {
+        alert("An unexpected error occurred. Please try again.");
+      }
+      console.error("Signup error:", error);
+    }
   };
   return (
     <div id="wd-signup-screen"  style={{ width: "300px" }}>
