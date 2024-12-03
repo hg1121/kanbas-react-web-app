@@ -70,7 +70,7 @@ export default function TOC() {
       <li>
         <a
           id="wd-k"
-          href="https://kanbas-node-server-app-1-n0tk.onrender.com"
+          href="https://kanbas-node-server-app-a6-xzz6.onrender.com"
           className="nav-link"
         >
           Server on Render

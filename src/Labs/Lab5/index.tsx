@@ -16,7 +16,7 @@ export default function Lab5() {
              className="list-group-item">
              Welcome
           </a> */}
-          <a href="https://kanbas-node-server-app-1-n0tk.onrender.com/lab5/welcome"          
+          <a href="http://localhost:4000/lab5/welcome"          
              className="list-group-item">
              Welcome
           </a>
