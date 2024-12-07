@@ -14,7 +14,7 @@ export const fetchQuiz = async(courseId: string, quizId: string) => {
 }
 
 export const addQuiz = async(courseId: string, quiz: any) => {
-    const {data} = await axios.post(`${COURSES_API}/${courseId}/quizzes/`, quiz);
+    const {data} = await axios.post(`${COURSES_API}/${courseId}/quizzes`, quiz);
     return data;
 }
 
@@ -25,4 +25,18 @@ export const updateQuiz = async(courseId: string, quizId: string, newQuiz: any) 
 
 export const deleteQuiz = async(courseId: string, quizId: string) => {
     await axios.delete(`${COURSES_API}/${courseId}/quizzes/${quizId}`);
+}
+
+// for student quiz attempt
+// add attempt
+export const submitAttempt = async(courseId: string, quizId: string, uid: string, answers: any) => {
+    console.log("in submitAttempt: ", courseId, quizId, uid, answers);
+    const {data} = await axios.post(`${COURSES_API}/${courseId}/quizzes/${quizId}/attempts`, {uid, answers});
+    return data;
+}
+
+// fetch last attempt
+export const fetchLastAttempt = async(courseId: string, quizId: string, uid: string) => {
+    const {data} = await axios.get(`${COURSES_API}/${courseId}/quizzes/${quizId}/attempts/${uid}`);
+    return data;
 }

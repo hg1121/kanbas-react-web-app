@@ -11,6 +11,8 @@ import AssignmentEditor from "./Assignments/Editor";
 import PeopleTable from "./People/Table";
 import { useState } from "react";
 import QuizEditor from "./Quizzes/QuizDetail";
+import * as courseClient from "./client";
+import TakeQuiz from "./Quizzes/TakeQuiz";
 
 export default function Courses({ courses }: { courses: any[]; }) {
   const location = useLocation();
@@ -19,7 +21,7 @@ export default function Courses({ courses }: { courses: any[]; }) {
   const wildcard = pathSegments[4]
   // console.log("courses", courses);
   // const [parentCourses, setCourses] = useState(courses);
-  let course = courses?.find((course: { _id: string | object; }) => course._id === cid);
+  let course = courses?.find((course: { _id: string | object; }) => course._id === cid) || courseClient.fetchSpecificCourse(cid);
 
   return (
     <div id="wd-courses">
@@ -47,6 +49,10 @@ export default function Courses({ courses }: { courses: any[]; }) {
               path={`/${course._id}/Quizzes/:qid`}
               element={<QuizEditor />}
             />
+            <Route
+             path ={`/${course._id}/Quizzes/:qid/take-quiz`}
+             element={<TakeQuiz />}
+            /> 
             <Route path={`/${course._id}/People`} element={<PeopleTable />} />
           </Routes>
         </div>

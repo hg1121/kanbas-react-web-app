@@ -22,6 +22,7 @@ interface Quiz {
   title: string;
   quizType: string;
   points: number;
+  description: string;
   assignmentGroup: string;
   shuffleAnswers: boolean;
   timeLimit: number;
@@ -55,7 +56,7 @@ export default function QuizEditorQuestion({
   const quizId = pathSegments[5];
 
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const [selectedQuestion, setSelectedQuestion] = useState();
+  const [selectedQuestion, setSelectedQuestion] = useState<Question | undefined>(undefined);
   const [questions, setQuestions] = useState<Question[]>(quiz.questions);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -135,6 +136,7 @@ export default function QuizEditorQuestion({
         <QuizModal
           setModalOpen={setModalOpen}
           parentQuestion={selectedQuestion}
+          setParentQuestion = {setSelectedQuestion}
           questions={questions}
           setQuestions={setQuestions}
         />

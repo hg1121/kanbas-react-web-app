@@ -8,6 +8,7 @@ interface Quiz {
     title: string;
     quizType: string;
     points: number;
+    description:string;
     assignmentGroup: string;
     shuffleAnswers: boolean;
     timeLimit: number;

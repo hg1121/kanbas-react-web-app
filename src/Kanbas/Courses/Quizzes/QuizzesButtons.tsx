@@ -17,7 +17,7 @@ export default function QuizzesButtons() {
   const [addQuiz, setAddQuiz] = useState(false);
   const navigate = useNavigate();
   const newQuiz = {
-    quizId: "1234567",
+    _id: "1234567",
     title: "untitled new quiz",
     courseId: courseId,
     quizType: "Graded Quiz",
@@ -36,15 +36,14 @@ export default function QuizzesButtons() {
     availableDate: "2024-12-01",
     untilDate: "2024-12-20",
     questions: [],
-    published: true
+    published: false
   }
 
   const handleOnClick = async() => {
     setAddQuiz(!addQuiz);
-    const uniqueId = new Date().getTime().toString();
-    const quiz = {...newQuiz, quizId: uniqueId};
-    navigate(`${quiz.quizId}`, { state: { quiz} });
-    await QuizClient.addQuiz(courseId, quiz);
+    // const uniqueId = new Date().getTime().toString();
+    const createdQuiz = await QuizClient.addQuiz(courseId, newQuiz);
+    navigate(`${createdQuiz._id}`, { state: {quiz: createdQuiz} });
   };
 
   

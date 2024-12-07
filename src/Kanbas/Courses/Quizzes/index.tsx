@@ -9,7 +9,9 @@ import { FaCaretDown } from "react-icons/fa";
 import { RxRocket } from "react-icons/rx";
 import { useSelector } from "react-redux";
 import { IoEllipsisVertical } from "react-icons/io5";
-import GreenCheckmark from "../Modules/GreenCheckmark";
+import QuizGreenCheckmark from "./QuizGreenCheckmark";
+import RedCircleMark from "./RedCircleMark";
+
 
 const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
@@ -30,6 +32,7 @@ export default function QuizList() {
   const courseId = pathSegments[3];
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const [quizzes, setQuizzes] = useState<any[]>([]);
+  const [lastAttempts, setLastAttempts] = useState<{ [key: string]: number }>({});
 
   const fetchQuizzesForCourse = async () => {
     const newQuizzes = await QuizClient.fetchQuizzes(courseId);
@@ -37,6 +40,32 @@ export default function QuizList() {
   };
 
   const [contextOpen, setContextOpen] = useState(false);
+
+  const fetchLastAttempts = async () => {
+    const attempts: { [key: string]: number } = {};
+  
+    await Promise.all(
+      quizzes.map(async (quiz: any) => {
+        try {
+          const lastAttempt = await QuizClient.fetchLastAttempt(courseId, quiz._id, currentUser._id);
+          // console.log(lastAttempt);
+          attempts[quiz._id] = lastAttempt?.score; // Store score or null if no attempt
+        } catch (error) {
+          console.error(`Error fetching last attempt for quiz ${quiz._id}`, error);
+        }
+      })
+    );
+  
+    // console.log(attempts);
+    setLastAttempts(attempts);
+
+  };
+
+  useEffect(() => {
+    if (currentUser.role === "STUDENT" && quizzes.length > 0) {
+      fetchLastAttempts();
+    }
+  }, [quizzes, currentUser]);
 
   // Fetch quizzes on load
   useEffect(() => {
@@ -79,17 +108,32 @@ export default function QuizList() {
   };
 
   const handleDelete = async(selectedQuiz: any) => {
-    await QuizClient.deleteQuiz(courseId, selectedQuiz.quizId);
+    await QuizClient.deleteQuiz(courseId, selectedQuiz._id);
     fetchQuizzesForCourse();
     setContextOpen(false);
   }
 
-  const isOpen = (avaliable: any, dueDate: any) => {
-    const currentDate = new Date(); // Get the current date and time
-    const dueDateObj = new Date(dueDate); // Convert dueDate string to a Date object
-    const avaDateObj = new Date(avaliable); // Convert dueDate string to a Date object
-    return avaDateObj < currentDate && currentDate < dueDateObj; // Check if the current date is after the due date
-  };
+  const handlePublishUpdate = async(selectedQuiz: any) => {
+    await QuizClient.updateQuiz(courseId, selectedQuiz._id, {...selectedQuiz, published: !selectedQuiz.published});
+    fetchQuizzesForCourse();
+    setContextOpen(false);
+  }
+
+  function getQuizAvailability(availableDate: string, dueDate: string): string {
+    const now = new Date();
+    const available = new Date(availableDate);
+    const due = new Date(dueDate);
+  
+    if (now > due) {
+      return "Closed";
+    } else if (now >= available && now <= due) {
+      // console.log("now: ", now, "due: ", due, "available: ", available );
+      return "Available";
+    } else if (now < available) {
+      return `Not available until ${available.toLocaleDateString()} ${available.toLocaleTimeString()}`;
+    }
+    return "Unknown";
+  }
   
 
   return (
@@ -112,36 +156,35 @@ export default function QuizList() {
               className="wd-module list-group-item p-3 fs-5 border-gray d-flex justify-content-between align-items-center"
               key={index}
             >
-              <span className="d-flex align-items-center">
+              <span className="d-flex align-items-center" style={{width: "90%"}}>
                 <RxRocket className="me-4 fs-3 text-green" />
                 <span>
                   <h4>
-                    {currentUser.role === "FACULTY" ? (
+                    {/* {currentUser.role === "FACULTY" ? ( */}
                       <Link
-                        to={`/Kanbas/Courses/${courseId}/Quizzes/${quiz.quizId}`}
+                        to={`/Kanbas/Courses/${courseId}/Quizzes/${quiz._id}`}
                         state={{quiz}}
                       >
                         {quiz.title}
                       </Link>
-                    ) : (
+                    {/* ) : (
                       quiz.title
-                    )}
+                    )} */}
                   </h4>
-                  <span>
-                    {isOpen(quiz.availableDate, quiz.dueDate)
-                      ? "Closed"
-                      : "Open"}
-                  </span>{" "}
-                  | <b>Not available until </b>
-                  {formatDate(quiz.availableDate)} | <br />
-                  <b>Due </b>
-                  {formatDate(quiz.dueDate)} | {quiz.points} pts
+                  <span> {getQuizAvailability(quiz.availableDate, quiz.dueDate)} </span> | {" "}
+                  <b>Due </b> {formatDate(quiz.dueDate)} | {" "}
+                  {quiz.questions ? quiz.questions.reduce((total: number, question: any) => total + (question.points || 0), 0) : 0} pts | {" "}
+                  {quiz.questions.length} Questions 
+                  {currentUser.role === "STUDENT" && lastAttempts[quiz._id] != null && (
+                    <span> | Last Attempt: <strong className="me-1">{lastAttempts[quiz._id]}</strong>pts</span>
+                  )}
                 </span>
               </span>
               <div>
                 {/* {currentUser.role === "FACULTY" && <FaTrash className="text-danger me-2 mb-1" onClick={() => {handleDelete(assignment._id)}}/>} */}
                 <div className="float-end">
-                  <GreenCheckmark />
+                  {quiz.published ? <QuizGreenCheckmark /> : <RedCircleMark />}
+                  {/* <QuizGreenCheckmark isPublished={quiz.published}/> */}
                   <IoEllipsisVertical
                     className="fs-4"
                     onClick={(e) => handleIconClick(e, quiz)}
@@ -163,16 +206,16 @@ export default function QuizList() {
             zIndex: 1000,
           }}
         >
-          <Link className="dropdown-item" to={`/Kanbas/Courses/${courseId}/Quizzes/${selectedQuiz.quizId}`}
+          <Link className="dropdown-item" to={`/Kanbas/Courses/${courseId}/Quizzes/${selectedQuiz._id}`}
                         state={{ selectedQuiz}}>
             Edit
           </Link>
           <li className="dropdown-item" onClick={() => {handleDelete(selectedQuiz)}}>
-            DELETE
+            Delete
           </li>
-          <a className="dropdown-item" href="#">
-            Publish
-          </a>
+          <li className="dropdown-item" onClick = {() => {handlePublishUpdate(selectedQuiz)}}>
+            {selectedQuiz.published ? "Unpublish": "Publish"}
+          </li>
           <a className="dropdown-item" href="#">
             Copy
           </a>

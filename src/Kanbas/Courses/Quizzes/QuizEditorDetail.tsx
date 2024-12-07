@@ -3,6 +3,7 @@ import { useLocation, useNavigate} from "react-router-dom";
 import AssignTo from "../Assignments/AssignTo";
 import * as QuizClient from "./client";
 import { useEffect, useState } from "react";
+import ReactQuill from "react-quill";
 
 interface Quiz {
     quizId: string;
@@ -10,6 +11,7 @@ interface Quiz {
     title: string;
     quizType: string;
     points: number;
+    description: string;
     assignmentGroup: string;
     shuffleAnswers: boolean;
     timeLimit: number;
@@ -88,7 +90,7 @@ export default function QuizEditorDetail({
     <div>
       <form className="d-block">
         <input
-          className="form-control"
+          className="form-control mb-1"
           type="text"
           placeholder="Quiz Title"
           value={newquiz.title}
@@ -99,9 +101,22 @@ export default function QuizEditorDetail({
             }))
           }
         />
+        <div style={{ height: "50%" }}>
         <p>Quiz Instructions:</p>
-        <textarea />
-        <div className="d-flex position-relative" style={{ width: "50%" }}>
+        <ReactQuill
+          theme="snow"
+          value={newquiz.description || ""} // Use `newquiz` here
+          onChange={(value: any) =>
+            setNewQuiz((prevQuiz: any) => ({
+              ...prevQuiz,
+              description: value, // Update description in `newquiz`
+            }))
+          }
+          placeholder="Write the quiz description here..."
+          className="mb-4"
+        />
+        </div>
+        <div className="d-flex position-relative ps-5" style={{ width: "60%" }}>
           <label htmlFor="quiz-type" className="me-3">
             Quiz Type
           </label>
@@ -109,7 +124,7 @@ export default function QuizEditorDetail({
             id="quiz-type"
             className="form-control form-control-lg rounded-1 pe-5 mb-3"
             style={{
-              width: "80%",
+              width: "50%",
               appearance: "none",
               paddingRight: "30px",
             }}
@@ -128,14 +143,14 @@ export default function QuizEditorDetail({
           <FiChevronDown
             style={{
               position: "absolute",
-              right: "15%",
+              right: "30%",
               top: "50%",
               transform: "translateY(-50%)",
               pointerEvents: "none",
             }}
           />
         </div>
-        <div className="d-flex position-relative" style={{ width: "50%" }}>
+        <div className="d-flex position-relative ps-5" style={{ width: "60%" }}>
           <label htmlFor="assignment-group" className="me-3">
             Assignment Group
           </label>
@@ -143,7 +158,7 @@ export default function QuizEditorDetail({
             id="assignment-group"
             className="form-control form-control-lg rounded-1 pe-5 mb-3"
             style={{
-              width: "80%",
+              width: "50%",
               appearance: "none",
               paddingRight: "30px",
             }}

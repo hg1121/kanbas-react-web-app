@@ -27,6 +27,10 @@ export const createCourse = async (course: any) => {
     return data;
 };
 
+export const fetchSpecificCourse = async(id: string) => {
+    const { data } = await axiosWithCredentials.get(`${COURSES_API}/${id}`);
+    return data;
+}
 
 // ******** People
 export const findUsersForCourse = async (courseId: string) => {
