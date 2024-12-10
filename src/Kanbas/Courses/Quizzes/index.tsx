@@ -36,7 +36,7 @@ export default function QuizList() {
 
   const fetchQuizzesForCourse = async () => {
     const newQuizzes = await QuizClient.fetchQuizzes(courseId);
-    if(currentUser.role === "FACULTY"){
+    if(currentUser.role === "FACULTY" || currentUser.role === "ADMIN"){
       setQuizzes(newQuizzes);
     }else if (currentUser.role === "STUDENT"){
       const publishedQuizzes = newQuizzes.filter((q:any) => q.published);

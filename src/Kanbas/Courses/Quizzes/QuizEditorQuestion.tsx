@@ -84,7 +84,7 @@ export default function QuizEditorQuestion({
     <div className="container">
       <h3 className="text-center mb-4">Quiz Questions</h3>
       <div>
-        {currentUser.role === "FACULTY" ? (
+        {(currentUser.role === "FACULTY" || currentUser.role === "ADMIN") ? (
           <div>
             {questions.map((question, index) => (
               <div

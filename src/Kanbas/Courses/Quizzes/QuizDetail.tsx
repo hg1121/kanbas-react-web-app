@@ -96,7 +96,7 @@ export default function QuizDetail() {
 
   return (
     <div>
-      {currentUser.role === "FACULTY" ? (
+      {(currentUser.role === "FACULTY" || currentUser.role === "ADMIN" )? (
         <div>
           <div className="btns">
             <button
@@ -218,8 +218,8 @@ export default function QuizDetail() {
           <div>
           <p>{quiz.questions.length} Questions </p>
           <p>Time Limit: {quiz.timeLimit} Minutes</p>
-          {totalAttempts >= quiz.howManyAttempts && <p className="text-danger">You have run out of attempts.</p>}
-          {score && <p>Last Attempt at {formatDate(lastAttemptDate)}, get score: {score}</p>}
+          {totalAttempts >= quiz.howManyAttempts ? <p className="text-danger">You have run out of attempts.</p> : <p className="text-danger">Remaining Attempts: {quiz.howManyAttempts - totalAttempts}</p>}
+          {score && <p>Last Attempt at {formatDate(lastAttemptDate)}, get score: <strong className="text-success"> {score} </strong></p>}
           <button 
             className="btn btn-danger rounded-1" 
             onClick={handleStartQuizButton}

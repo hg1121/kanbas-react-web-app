@@ -68,7 +68,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
       <button onClick={() => setEnrolling(!enrolling)} className="float-end btn btn-primary rounded-1" >
           {enrolling ? "My Courses" : "All Courses"}
         </button>
-      {currentUser.role === "FACULTY" && <><h5>New Course
+      {(currentUser.role === "FACULTY" || currentUser.role === "ADMIN") && <><h5>New Course
           <button className="btn btn-primary float-end rounded-1 me-2"
                   id="wd-add-new-course-click"
                   type="button"
@@ -115,7 +115,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
                     </p>
                     <button className="btn btn-primary rounded-1"> Go </button>
 
-                    {currentUser.role === "FACULTY" && 
+                    {(currentUser.role === "FACULTY" || currentUser.role === "ADMIN") && 
                     <>
                     <button onClick={(event) => {handleDeleteCourseButton(event, course)}} className="btn btn-danger float-end rounded-1"
                     id="wd-delete-course-click">

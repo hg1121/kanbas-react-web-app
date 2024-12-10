@@ -64,7 +64,7 @@ export default function QuizzesButtons() {
       </div>
 
       {/* Buttons */}
-      {currentUser.role == "FACULTY" && (
+      {(currentUser.role === "FACULTY" || currentUser.role === "ADMIN") && (
         <div>
           <button className="btn btn-assignment bg-danger text-white rounded-1 me-1" onClick={handleOnClick}>
             <FiPlus /> Quiz

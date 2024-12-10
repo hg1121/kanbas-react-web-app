@@ -99,7 +99,7 @@ export default function Assignments() {
             <GiNotebook className="me-2 fs-3 text-green" />
             <span>
             <h4>
-              {currentUser.role === "FACULTY" ? 
+              {(currentUser.role === "FACULTY" || currentUser.role === "ADMIN") ? 
                <Link to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`} state={{ newassignment: assignment, editing: true }}className="no-decoration"> {assignment.title}</Link>
               : assignment.title}
               </h4>
@@ -109,7 +109,7 @@ export default function Assignments() {
             </span>
           </span>
           <div>
-          {currentUser.role === "FACULTY" && <FaTrash className="text-danger me-2 mb-1" onClick={() => {handleDelete(assignment._id)}}/>}
+          {(currentUser.role === "FACULTY" || currentUser.role === "ADMIN") && <FaTrash className="text-danger me-2 mb-1" onClick={() => {handleDelete(assignment._id)}}/>}
           <LessonControlButtons />
           </div>
         </li>
