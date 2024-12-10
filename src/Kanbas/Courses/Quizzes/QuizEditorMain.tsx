@@ -41,8 +41,8 @@ export default function QuizEditorMain({ editing, setEditing, quiz, setQuiz}: Qu
     <div>
         <hr/>
       <div>
-        <button className="btn btn-secondary me-2" onClick={() => setShowDetailPage(true)}>Details</button>
-        <button className="btn btn-secondary" onClick={() => setShowDetailPage(false)}>Questions</button>
+        <button className="btn btn-secondary me-2 mb-1" onClick={() => setShowDetailPage(true)}>Details</button>
+        <button className="btn btn-secondary mb-1 " onClick={() => setShowDetailPage(false)}>Questions</button>
       </div>
       {showDetailPage ? (
         <QuizEditorDetail

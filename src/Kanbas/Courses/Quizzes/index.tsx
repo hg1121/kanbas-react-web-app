@@ -36,7 +36,12 @@ export default function QuizList() {
 
   const fetchQuizzesForCourse = async () => {
     const newQuizzes = await QuizClient.fetchQuizzes(courseId);
-    setQuizzes(newQuizzes);
+    if(currentUser.role === "FACULTY"){
+      setQuizzes(newQuizzes);
+    }else if (currentUser.role === "STUDENT"){
+      const publishedQuizzes = newQuizzes.filter((q:any) => q.published);
+      setQuizzes(publishedQuizzes);
+    }
   };
 
   const [contextOpen, setContextOpen] = useState(false);
@@ -49,7 +54,7 @@ export default function QuizList() {
         try {
           const lastAttempt = await QuizClient.fetchLastAttempt(courseId, quiz._id, currentUser._id);
           // console.log(lastAttempt);
-          attempts[quiz._id] = lastAttempt?.score; // Store score or null if no attempt
+          attempts[quiz._id] = lastAttempt?.lastAttempt.score; // Store score or null if no attempt
         } catch (error) {
           console.error(`Error fetching last attempt for quiz ${quiz._id}`, error);
         }
@@ -134,6 +139,13 @@ export default function QuizList() {
     }
     return "Unknown";
   }
+
+  const calculatePoints = (quiz: any) => {
+    if (quiz.questions) {
+      return quiz.questions.reduce((total: number, question: any) => total + (question.points || 0), 0)
+    }
+    return 0;
+  }
   
 
   return (
@@ -173,10 +185,10 @@ export default function QuizList() {
                   </h4>
                   <span> {getQuizAvailability(quiz.availableDate, quiz.dueDate)} </span> | {" "}
                   <b>Due </b> {formatDate(quiz.dueDate)} | {" "}
-                  {quiz.questions ? quiz.questions.reduce((total: number, question: any) => total + (question.points || 0), 0) : 0} pts | {" "}
+                  {calculatePoints(quiz)} pts | {" "}
                   {quiz.questions.length} Questions 
                   {currentUser.role === "STUDENT" && lastAttempts[quiz._id] != null && (
-                    <span> | Last Attempt: <strong className="me-1">{lastAttempts[quiz._id]}</strong>pts</span>
+                    <span> | Last Attempt: <strong className="me-1">Score: {lastAttempts[quiz._id]}</strong></span>
                   )}
                 </span>
               </span>

@@ -38,6 +38,26 @@ export default function QuizDetail() {
   const [editing, setEditing] = useState(false);
   const [preview, setPreview] = useState(false);
 
+  const [score, setScore] = useState();
+  const [lastAttemptDate, setLastAttemptDate] = useState("");
+  const [totalAttempts, setTotalAttempts] = useState(0);
+  const fetchLastAttempt = async () => {
+    try {
+      const data = await QuizClient.fetchLastAttempt(courseId, quizId, currentUser._id);
+      const lastAttempt = data.lastAttempt;
+      if (lastAttempt) {
+        setTotalAttempts(data.totalAttempts)
+        setScore(lastAttempt.score);
+        setLastAttemptDate(lastAttempt.createdAt);
+      } else {
+        // Initialize empty answers for each question if no previous attempt
+        // setAnswers(questions.map(() => ({ selectedOptions: [] })));
+      }
+    } catch (error) {
+      console.error("Error fetching last attempt:", error);
+    }
+  };
+
   useEffect(() => {
     // Fetch updated quiz data if necessary
     if (!quiz) {
@@ -51,6 +71,7 @@ export default function QuizDetail() {
       };
       fetchQuiz();
     }
+    fetchLastAttempt();
   }, [courseId, quizId, quiz]);
 
   const saveQuiz = async () => {
@@ -64,6 +85,13 @@ export default function QuizDetail() {
 
   const handleStartQuizButton = () => {
     navigate(`/Kanbas/Courses/${courseId}/quizzes/${quizId}/take-quiz`);
+  }
+
+  const calculatePoints = (quiz: any) => {
+    if (quiz.questions) {
+      return quiz.questions.reduce((total: number, question: any) => total + (question.points || 0), 0)
+    }
+    return 0;
   }
 
   return (
@@ -107,7 +135,7 @@ export default function QuizDetail() {
                   </tr>
                   <tr className="quiz-row">
                     <td className="quiz-label">Points</td>
-                    <td className="quiz-value">{quiz.points}</td>
+                    <td className="quiz-value">{calculatePoints(quiz)}</td>
                   </tr>
                   <tr className="quiz-row">
                     <td className="quiz-label">Assignment Group</td>
@@ -130,8 +158,16 @@ export default function QuizDetail() {
                     </td>
                   </tr>
                   <tr className="quiz-row">
+                    <td className="quiz-label"> How Many Attempts </td>
+                    <td className="quiz-value">{quiz.howManyAttempts}</td>
+                  </tr>
+                  <tr className="quiz-row">
                     <td className="quiz-label">Show Correct Answers</td>
                     <td className="quiz-value">{quiz.showCorrectAnswers}</td>
+                  </tr>
+                  <tr className="quiz-row">
+                    <td className="quiz-label">Access Code </td>
+                    <td className="quiz-value">{quiz.accessCode ? quiz.accessCode : "Not needed"}</td>
                   </tr>
                   <tr className="quiz-row">
                     <td className="quiz-label">One Question At a Time</td>
@@ -182,7 +218,13 @@ export default function QuizDetail() {
           <div>
           <p>{quiz.questions.length} Questions </p>
           <p>Time Limit: {quiz.timeLimit} Minutes</p>
-          <button className="btn btn-danger rounded-1" onClick={handleStartQuizButton}>Start Quiz</button>
+          {totalAttempts >= quiz.howManyAttempts && <p className="text-danger">You have run out of attempts.</p>}
+          {score && <p>Last Attempt at {formatDate(lastAttemptDate)}, get score: {score}</p>}
+          <button 
+            className="btn btn-danger rounded-1" 
+            onClick={handleStartQuizButton}
+            disabled={totalAttempts >= quiz.howManyAttempts}
+          > Start Quiz </button>
           </div>
         </div>
       )}

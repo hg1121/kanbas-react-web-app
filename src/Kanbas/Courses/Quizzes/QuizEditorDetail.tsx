@@ -54,6 +54,9 @@ export default function QuizEditorDetail({
   const courseId = pathSegments[3];
   const quizId = pathSegments[5];
   const [newquiz, setNewQuiz] = useState(quiz);
+  const currentPath = location.pathname || location.hash;
+  const basePath = currentPath.substring(0, currentPath.lastIndexOf("/"));
+  const basePathWithoutQuery = basePath.split('?')[0]; 
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, checked } = e.target;
@@ -67,10 +70,7 @@ export default function QuizEditorDetail({
   const handleCancleButton = () => {
     setEditing(false);
     setShowDetailPage(false);
-    const currentPath = location.pathname || location.hash;
-    const basePath = currentPath.substring(0, currentPath.lastIndexOf("/"));
-
-    const basePathWithoutQuery = basePath.split('?')[0]; // Remove query parameters
+    // Remove query parameters
     // Navigate back to the base path (Quizzes page), ensuring no query params or hash interferes
     navigate(basePathWithoutQuery); 
   };
@@ -81,6 +81,14 @@ export default function QuizEditorDetail({
     await QuizClient.updateQuiz(courseId, quizId, newquiz);
     setQuiz(newquiz);
     setEditing(false); // Disable editing
+  }
+
+  const handleSaveAndPublishButton = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await QuizClient.updateQuiz(courseId, quizId, newquiz);
+    setQuiz(newquiz);
+    setEditing(false); // Disable editing
+    navigate(basePathWithoutQuery); 
   }
 
   useEffect(() => {
@@ -238,12 +246,92 @@ export default function QuizEditorDetail({
                 onChange={(e) => handleCheckboxChange(e)}
               />
               <label
-                className="custom-control-label"
+                className="custom-control-label me-2"
                 htmlFor="multipleAttempts"
               >
                 Allow Multiple Attempts
               </label>
+              <input type="number" id="howManyAttempts" onChange={(e) => setNewQuiz({...newquiz, howManyAttempts: parseInt(e.target.value, 10)})} min={1}/>
+              <label htmlFor="howManyAttempts">Times</label>
             </div>
+            <div className="checkbox-item">
+              <input
+                type="checkbox"
+                className="custom-control-input me-2"
+                id="showCorrectAnswers"
+                checked={newquiz.showCorrectAnswers === "Immediately"}
+                onChange={(e) => {
+                  setNewQuiz((prevQuiz) => ({
+                    ...prevQuiz,
+                    showCorrectAnswers: e.target.checked ? "Immediately" : "After Due Date", // Toggle between "Immediately" and ""
+                  }));
+                }}
+              />
+              <label className="custom-control-label" htmlFor="showCorrectAnswers">
+                Show Correct Answers
+              </label>
+            </div>
+            <div className="checkbox-item">
+                <input 
+                type="checkbox"
+                className="custom-control-input me-2"
+                id="one-question-at-a-time"
+                checked={newquiz.oneQuestionAtATime}
+                onChange={(e) => handleCheckboxChange(e)}
+                />
+                <label className="custom-control-label" htmlFor="one-question-at-a-time">One Question at a Time </label>
+            </div>
+            <div className="checkbox-item">
+                <input 
+                type="checkbox"
+                className="custom-control-input me-2"
+                id="webcamRequired"
+                checked={newquiz.webcamRequired}
+                onChange={(e) => handleCheckboxChange(e)}
+                />
+                <label className="custom-control-label" htmlFor="webcamRequired"> Webcam Required </label>
+            </div>
+            <div className="checkbox-item">
+                <input 
+                  type="checkbox"
+                  className="custom-control-input me-2"
+                  id="lockQuestionsAfterAnswering"
+                  checked={newquiz.lockQuestionsAfterAnswering}
+                  onChange={(e) => handleCheckboxChange(e)}
+                />
+                <label className="custom-control-label" htmlFor="lockQuestionsAfterAnswering"> Lock Questions After Answering  </label>
+            </div>
+            <div className="checkbox-item">
+              <input
+                type="checkbox"
+                className="custom-control-input me-2"
+                id="accessCodeRequired" // Updated to match the key used for clarity
+                checked={newquiz.accessCode !== ""}
+                onChange={(e) => {
+                  // Toggle accessCode between empty and default value
+                  setNewQuiz((prevQuiz: any) => ({
+                    ...prevQuiz,
+                    accessCode: e.target.checked ? "DEFAULT_CODE" : "", // Use an empty string if unchecked
+                  }));
+                }}
+              />
+              <label className="custom-control-label me-2" htmlFor="accessCodeRequired">
+                Access Code
+              </label>
+              <input
+                type="text"
+                value={newquiz.accessCode}
+                onChange={(e) =>
+                  setNewQuiz((prevQuiz: any) => ({
+                    ...prevQuiz,
+                    accessCode: e.target.value,
+                  }))
+                }
+                disabled={newquiz.accessCode === ""}
+                placeholder="Enter access code"
+              />
+            </div>
+
           </div>
         </div>
 
@@ -325,9 +413,10 @@ export default function QuizEditorDetail({
           </tbody>
         </table>
         <hr />
-        <div>
-          <button onClick={handleCancleButton}>Cancle</button>
-          <button onClick={(e)=> handleSaveButton(e)}>Save</button>
+        <div className="float-end me-5">
+          <button className = "btn btn-secondary rounded-1 me-2" onClick={handleCancleButton}>Cancle</button>
+          <button className = "btn btn-danger rounded-1 me-2" onClick={(e)=> handleSaveButton(e)}>Save</button>
+          <button className="btn btn-primary rounded-1" onClick={(e) => handleSaveAndPublishButton(e)}> Save & Publish </button>
         </div>
       </form>
     </div>

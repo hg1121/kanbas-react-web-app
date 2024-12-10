@@ -1,3 +1,5 @@
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+
 interface Question {
   title: string;
   type: string;
@@ -6,55 +8,102 @@ interface Question {
   choices: string[];
   correctAnswer: string[];
 }
+
 interface QuestionCardProps {
-  question: Question;
-  index: number;
-  navigateToNext: () => void;
+  question: Question; // The current question object
+  index: number; // Index of the question
+  selectedOptions: string[]; // The selected options for the question
+  onAnswerChange: (selectedOptions: string[]) => void; // Callback to handle answer changes
+  navigateToNext: () => void; // Function to navigate to the next question
+  submitted: boolean; // Indicates if the quiz has been submitted
 }
+
 export default function QuestionCard({
   question,
   index,
+  selectedOptions,
+  onAnswerChange,
   navigateToNext,
+  submitted,
 }: QuestionCardProps) {
-  // console.log(question.type);
+  const handleOptionChange = (option: string, isChecked: boolean) => {
+    const updatedOptions = isChecked
+      ? [...selectedOptions, option]
+      : selectedOptions.filter((opt) => opt !== option);
+    onAnswerChange(updatedOptions);
+  };
+
+  const isAnswerCorrect = () => {
+    if (question.type === "Fill In the Blank") {
+      // Check if any correct answer matches the user-provided answer
+      return question.correctAnswer.some(
+        (correct) =>
+          correct.trim().toLowerCase() === (selectedOptions[0] || "").trim().toLowerCase()
+      );
+    }
+  
+    // For multiple-choice and true/false
+    return (
+      JSON.stringify(selectedOptions.sort()) ===
+      JSON.stringify(question.correctAnswer.sort())
+    );
+  };
+
   return (
-    <div className="card text-center text-muted">
-      {question ? (
+    <div>
+      <h5>Question {index + 1}</h5>
+      <p>{question.questionDescription.replaceAll(/<\/?p[^>]*>/g, "")}</p>
+      {question.type === "Fill In the Blank" ? (
         <div>
-          <div className="card-header d-flex justify-content-between">
-            <p>Question {index + 1}</p>
-            <p>{question.points} pts</p>
-          </div>
-
-          <div className="card-body">
-            {/* <h5 className="card-title">Special title treatment</h5> */}
-            <p className="card-text">{question.questionDescription.replaceAll(/<\/?p[^>]*>/g, '')}</p>
-            {question.type !== "Fill In the Blank" && question.choices.map((choice, index) => (
-              <div key={index} className="d-flex align-center">
-                <hr />
-                <input
-                  type={question.type === "True/False" ? "radio" : "checkbox"}
-                  className="me-2 mb-3"
-                  name={`question-${question.title}`}  
-                />
-                <p>{choice}</p>
-              </div>
-            ))}
-
-            {question.type === "Fill In the Blank" && <input type = "text"/>}
-
-            <button
-              onClick={navigateToNext}
-              className="btn btn-success float-end rounded-1"
-              disabled={!navigateToNext}
-            >
-              Next Question
-            </button>
-          </div>
+          <input
+            type="text"
+            value={selectedOptions[0] || ""}
+            onChange={(e) => onAnswerChange([e.target.value])}
+            disabled={submitted}
+            className="form-control mb-3"
+          />
+          {submitted && (
+            <span>
+              {isAnswerCorrect() ? (
+                <FaCheckCircle className="text-success ms-2" />
+              ) : (
+                <FaTimesCircle className="text-danger ms-2" />
+              )}
+            </span>
+          )}
         </div>
       ) : (
-        <p> Currently, no question added in this quiz.</p>
+        question.choices.map((choice) => (
+          <div key={choice} className="d-flex align-items-center mb-2">
+            <input
+              type="radio"
+              name={`question-${index}`}
+              value={choice}
+              checked={selectedOptions.includes(choice)}
+              onChange={(e) => handleOptionChange(choice, e.target.checked)}
+              disabled={submitted}
+              className="me-2"
+            />
+            <label>{choice}</label>
+            {submitted && selectedOptions.includes(choice) && (
+              <span className="ms-2">
+                {question.correctAnswer.includes(choice) ? (
+                  <FaCheckCircle className="text-success" />
+                ) : (
+                  <FaTimesCircle className="text-danger" />
+                )}
+              </span>
+            )}
+          </div>
+        ))
       )}
+      <button
+        onClick={navigateToNext}
+        disabled={submitted}
+        className="btn btn-primary mt-2"
+      >
+        Next
+      </button>
     </div>
   );
 }
