@@ -51,7 +51,7 @@ export default function AssignmentButtons({ cid }: ModulesProps) {
       </div>
 
       {/* Buttons */}
-      {currentUser.role == "FACULTY" && <div>
+      {(currentUser.role == "FACULTY" || currentUser.role === "ADMIN") && <div>
         <button
           className="btn bg-secondary me-1 rounded-1"
         >

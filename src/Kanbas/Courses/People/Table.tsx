@@ -3,6 +3,7 @@ import PeopleDetails from "./Details";
 import * as courseClient from "../client";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import * as accountClient from "../../Account/client";
 
 export default function PeopleTable() {
   const location = useLocation();
@@ -16,8 +17,14 @@ export default function PeopleTable() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const newUsers = await courseClient.findUsersForCourse(courseId);
-      setUsersInCourse(newUsers);
+      if (courseId === "Users"){
+        const allUsers = await accountClient.findAllUsers();
+        setUsersInCourse(allUsers);
+      }else{
+        const newUsers = await courseClient.findUsersForCourse(courseId);
+        setUsersInCourse(newUsers);
+      }
+
     } catch (error) {
       console.error("Error fetching users:", error);
     } finally {
@@ -27,7 +34,7 @@ export default function PeopleTable() {
 
   useEffect(() => {
     fetchUsers();
-    console.log(usersInCourse);
+    // console.log(usersInCourse);
   }, [courseId]);
 
   return (
