@@ -45,3 +45,11 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 # kanbas-react-web-app
+
+The final project is at branch P.
+
+The frontend is deployed on Netlify: https://p--hongskanbasreactweb.netlify.app/#/Kanbas.
+
+The backend is deployed on Render: https://kanbas-node-server-app-p-2435.onrender.com
+
+This project use MongoDB to store the user data.
